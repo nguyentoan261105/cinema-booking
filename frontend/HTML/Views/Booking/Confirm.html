@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Xác nhận đặt vé - Cinema</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+        rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="../../../CSS/site.css">
+
+    <link rel="stylesheet"
+          href="../../../CSS/booking.css">
+
+    <link rel="stylesheet"
+          href="../../../CSS/food.css">
+
+    <link rel="stylesheet"
+          href="../../../CSS/confirm.css">
+
+</head>
+
+<header class="main-header">
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+
+        <div class="container">
+
+            <a class="navbar-brand logo"
+               href="../Home/Index.html">
+
+                <i class="bi bi-film"></i>
+
+                <span>CINEMA</span>
+
+                <strong>BOOKING</strong>
+
+            </a>
+
+
+            <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#mainNavbar">
+
+                <span class="navbar-toggler-icon"></span>
+
+            </button>
+
+
+            <div class="collapse navbar-collapse"
+                 id="mainNavbar">
+
+                <ul class="navbar-nav mx-auto">
+
+                    <li class="nav-item">
+
+                        <a class="nav-link"
+                           href="../Home/Index.html">
+
+                            Trang chủ
+
+                        </a>
+
+                    </li>
+
+                    <li class="nav-item">
+
+                        <a class="nav-link"
+                           href="../Movies/Index.html">
+
+                            Phim
+
+                        </a>
+
+                    </li>
+
+                    <li class="nav-item">
+
+                        <a class="nav-link"
+                           href="../Cinema/Index.html">
+
+                            Rạp chiếu
+
+                        </a>
+
+                    </li>
+
+                    <li class="nav-item">
+
+                        <a class="nav-link"
+                           href="History.html">
+
+                            Vé của tôi
+
+                        </a>
+
+                    </li>
+
+                </ul>
+
+
+                <!-- ================= ACCOUNT ================= -->
+
+                    <div class="header-account">
+
+                        <!-- CHUA DANG NHAP -->
+
+                        <a
+                            href="../Account/Login.html"
+                            id="loginLink"
+                            class="btn-login">
+
+                            <i class="bi bi-person"></i>
+
+                            Đăng nhập
+
+                        </a>
+
+
+                        <a
+                            href="../Account/Register.html"
+                            id="registerLink"
+                            class="btn-register">
+
+                            Đăng ký
+
+                        </a>
+
+
+                        <!-- DA DANG NHAP -->
+
+                        <span
+                            id="userWelcome"
+                            class="btn-welcome"
+                            style="display: none;">
+
+                            <i class="bi bi-person-circle"></i>
+
+                            Xin chào,
+
+                            <strong id="userName"></strong>
+
+                        </span>
+
+
+                        <!-- DANG XUAT -->
+
+                        <a
+                            href="javascript:void(0);"
+                            id="logoutLink"
+                            class="btn-logout"
+                            style="display: none;"
+                            onclick="logout(); return false;">
+
+                            <i class="bi bi-box-arrow-right"></i>
+
+                        Đăng xuất
+
+                    </a>
+
+                 </div>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+</header>
+
+<body>
+    <!-- PROGRESS -->
+    <section class="booking-progress">
+
+        <div class="progress-item completed">
+            <span>1</span>
+            <p>Suất chiếu</p>
+        </div>
+
+        <div class="progress-line completed-line"></div>
+
+        <div class="progress-item completed">
+            <span>2</span>
+            <p>Chọn ghế</p>
+        </div>
+
+        <div class="progress-line completed-line"></div>
+
+        <div class="progress-item completed">
+            <span>3</span>
+            <p>Đồ ăn</p>
+        </div>
+
+        <div class="progress-line active-line"></div>
+
+        <div class="progress-item active">
+            <span>4</span>
+            <p>Xác nhận</p>
+        </div>
+
+        <div class="progress-line"></div>
+
+        <div class="progress-item">
+            <span>5</span>
+            <p>Thanh toán</p>
+        </div>
+
+    </section>
+
+
+    <!-- MAIN -->
+    <main class="confirm-container">
+
+        <div class="confirm-title">
+            <h1>Xác nhận đặt vé</h1>
+            <p>Vui lòng kiểm tra lại thông tin trước khi thanh toán.</p>
+        </div>
+
+
+        <div class="confirm-layout">
+
+            <!-- LEFT -->
+            <section class="confirm-left">
+
+                <!-- MOVIE INFORMATION -->
+                <div class="confirm-card">
+
+                    <h2>🎬 Thông tin phim</h2>
+
+                    <div class="movie-info">
+
+                        <div class="movie-poster">
+                            <img
+                                id="moviePoster"
+                                src="../../../images/movie-1.jpg"
+                                alt="Movie">
+                        </div>
+
+                        <div class="movie-details">
+
+                            <h3 id="movieName">
+                                Đang tải...
+                            </h3>
+
+                            <p>
+                                <strong>Rạp:</strong>
+                                <span id="cinemaName">
+                                    -
+                                </span>
+                            </p>
+
+                            <p>
+                                <strong>Ngày:</strong>
+                                <span id="showDate">
+                                    -
+                                </span>
+                            </p>
+
+                            <p>
+                                <strong>Suất:</strong>
+                                <span id="showTime">
+                                    -
+                                </span>
+                            </p>
+
+                            <p>
+                                <strong>Ghế:</strong>
+                                <span id="seatList">
+                                    -
+                                </span>
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- TICKET -->
+                <div class="confirm-card">
+
+                    <h2>💺 Vé xem phim</h2>
+
+                    <div class="ticket-row">
+
+                        <div>
+                            <strong>Vé xem phim</strong>
+
+                            <p>
+                                <span id="ticketCount">0</span>
+                                ghế
+                            </p>
+                        </div>
+
+                        <strong id="ticketPrice">
+                            0 ₫
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <!-- FOOD -->
+                <div class="confirm-card">
+
+                    <h2>🍿 Đồ ăn & thức uống</h2>
+
+                    <div id="foodList">
+
+                        <p class="empty-food">
+                            Không có đồ ăn hoặc thức uống.
+                        </p>
+
+                    </div>
+
+                    <div class="food-total-row">
+
+                        <span>
+                            Tổng đồ ăn
+                        </span>
+
+                        <strong id="foodTotal">
+                            0 ₫
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <!-- CUSTOMER -->
+                <div class="confirm-card">
+
+                    <h2>👤 Thông tin khách hàng</h2>
+
+                    <div class="customer-form">
+
+                        <div class="form-group">
+
+                            <label for="customerName">
+                                Họ và tên
+                            </label>
+
+                            <input
+                                type="text"
+                                id="customerName"
+                                placeholder="Nhập họ và tên">
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="customerEmail">
+                                Email
+                            </label>
+
+                            <input
+                                type="email"
+                                id="customerEmail"
+                                placeholder="Nhập email">
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="customerPhone">
+                                Số điện thoại
+                            </label>
+
+                            <input
+                                type="tel"
+                                id="customerPhone"
+                                placeholder="Nhập số điện thoại">
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- RIGHT -->
+            <aside class="confirm-right">
+
+                <div class="price-card">
+
+                    <h2>Chi tiết thanh toán</h2>
+
+
+                    <div class="price-row">
+
+                        <span>
+                            Tiền vé
+                        </span>
+
+                        <strong id="summaryTicketPrice">
+                            0 ₫
+                        </strong>
+
+                    </div>
+
+
+                    <div class="price-row">
+
+                        <span>
+                            Đồ ăn & thức uống
+                        </span>
+
+                        <strong id="summaryFoodPrice">
+                            0 ₫
+                        </strong>
+
+                    </div>
+
+
+                    <div class="price-divider"></div>
+
+
+                    <div class="total-row">
+
+                        <span>
+                            Tổng cộng
+                        </span>
+
+                        <strong id="grandTotal">
+                            0 ₫
+                        </strong>
+
+                    </div>
+
+
+                    <div class="payment-note">
+
+                        <span>🔒</span>
+
+                        <p>
+                            Thông tin thanh toán của bạn
+                            được bảo mật.
+                        </p>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        id="backFoodButton"
+                        class="back-button">
+
+                        ← Quay lại
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        id="paymentButton"
+                        class="payment-button">
+
+                        Tiến hành thanh toán →
+
+                    </button>
+
+                </div>
+
+            </aside>
+
+        </div>
+
+    </main>
+
+
+    <!-- FOOTER -->
+    <footer class="main-footer">
+
+    <div class="container">
+
+        <div class="footer-bottom">
+
+            <span>
+                © 2026 Cinema Booking.
+                All rights reserved.
+            </span>
+
+            <span>
+                Hệ thống đặt vé xem phim trực tuyến
+            </span>
+
+        </div>
+
+    </div>
+
+</footer>
+
+
+    <script src="../../../JS/confirm.js"></script>
+
+    <script src="../../../JS/site.js"></script>
+
+</body>
+</html>

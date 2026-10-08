@@ -1,0 +1,372 @@
+/* =========================
+   BOOKING STEP
+========================= */
+
+.booking-step-header {
+    padding: 25px 0;
+    background: #ffffff;
+    border-bottom: 1px solid #eeeeee;
+}
+
+.booking-steps {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.booking-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 90px;
+}
+
+.booking-step span {
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #dddddd;
+    color: #777777;
+    font-weight: 700;
+}
+
+.booking-step p {
+    margin: 8px 0 0;
+    color: #888888;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.booking-step.active span {
+    background: #e50914;
+    color: #ffffff;
+}
+
+.booking-step.active p {
+    color: #e50914;
+}
+
+.step-line {
+    width: 70px;
+    height: 2px;
+    margin: 0 5px 25px;
+    background: #dddddd;
+}
+
+
+/* =========================
+   SHOWTIME PAGE
+========================= */
+
+.showtime-page {
+    min-height: 700px;
+    padding: 60px 0 100px;
+    background: #f7f7f7;
+}
+
+
+/* =========================
+   MOVIE INFO
+========================= */
+
+.booking-movie-info {
+    display: flex;
+    gap: 25px;
+    align-items: center;
+    padding: 25px;
+    margin-bottom: 40px;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.06);
+}
+
+.booking-movie-poster {
+    width: 100px;
+    height: 140px;
+    overflow: hidden;
+    flex-shrink: 0;
+    border-radius: 6px;
+}
+
+.booking-movie-poster img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.movie-label {
+    color: #e50914;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.booking-movie-content h1 {
+    margin: 8px 0 15px;
+    font-size: 30px;
+    font-weight: 800;
+}
+
+.movie-basic-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    color: #777777;
+    font-size: 14px;
+}
+
+.movie-basic-info span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.movie-basic-info i {
+    color: #e50914;
+}
+
+
+/* =========================
+   SECTION
+========================= */
+
+.showtime-section {
+    padding: 30px;
+    margin-bottom: 25px;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+}
+
+.showtime-heading {
+    margin-bottom: 25px;
+}
+
+.showtime-heading span {
+    color: #e50914;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.showtime-heading h2 {
+    margin: 5px 0 0;
+    font-size: 25px;
+    font-weight: 800;
+}
+
+
+/* =========================
+   DATE
+========================= */
+
+.date-list {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding-bottom: 5px;
+}
+
+.date-item {
+    width: 95px;
+    min-width: 95px;
+    height: 105px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #dddddd;
+    border-radius: 8px;
+    background: #ffffff;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.date-item strong {
+    font-size: 27px;
+}
+
+.date-item span {
+    margin-top: 3px;
+    color: #777777;
+    font-size: 12px;
+}
+
+.date-item small {
+    color: #999999;
+    font-size: 11px;
+}
+
+.date-item:hover {
+    border-color: #e50914;
+}
+
+.date-item.active {
+    border-color: #e50914;
+    background: #e50914;
+    color: #ffffff;
+}
+
+.date-item.active span,
+.date-item.active small {
+    color: #ffffff;
+}
+
+
+/* =========================
+   CINEMA
+========================= */
+
+.cinema-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.cinema-item {
+    padding: 20px;
+    border: 1px solid #eeeeee;
+    border-radius: 8px;
+}
+
+.cinema-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.cinema-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: #fff0f0;
+    color: #e50914;
+    font-size: 20px;
+}
+
+.cinema-info h4 {
+    margin: 0 0 5px;
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.cinema-info p {
+    margin: 0;
+    color: #888888;
+    font-size: 13px;
+}
+
+.cinema-showtimes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.time-btn {
+    min-width: 85px;
+    padding: 9px 15px;
+    border: 1px solid #dddddd;
+    border-radius: 5px;
+    background: #ffffff;
+    color: #333333;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.time-btn:hover,
+.time-btn.active {
+    border-color: #e50914;
+    background: #e50914;
+    color: #ffffff;
+}
+
+
+/* =========================
+   NEXT
+========================= */
+
+.booking-next {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 25px;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+}
+
+.selected-showtime {
+    color: #777777;
+    font-size: 14px;
+}
+
+.selected-showtime strong {
+    color: #222222;
+}
+
+.booking-next-btn {
+    min-width: 160px;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    background: #e50914;
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.booking-next-btn:hover {
+    background: #b20710;
+}
+
+.booking-next-btn:disabled {
+    background: #cccccc;
+    cursor: not-allowed;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 767px) {
+
+    .booking-steps {
+        overflow-x: auto;
+        justify-content: flex-start;
+    }
+
+    .step-line {
+        width: 35px;
+    }
+
+    .booking-movie-info {
+        align-items: flex-start;
+    }
+
+    .booking-movie-content h1 {
+        font-size: 23px;
+    }
+
+    .showtime-section {
+        padding: 20px;
+    }
+
+    .booking-next {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 15px;
+    }
+
+    .booking-next-btn {
+        width: 100%;
+    }
+
+}

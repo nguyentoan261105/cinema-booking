@@ -1,0 +1,331 @@
+/* =========================
+   HISTORY PAGE
+========================= */
+
+.history-container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+
+/* TITLE */
+
+.history-title {
+    margin-bottom: 30px;
+}
+
+.history-title h1 {
+    font-size: 32px;
+    margin-bottom: 8px;
+}
+
+.history-title p {
+    color: #777;
+}
+
+
+/* FILTER */
+
+.history-filter {
+    display: flex;
+    gap: 10px;
+
+    margin-bottom: 25px;
+
+    flex-wrap: wrap;
+}
+
+.filter-button {
+    border: 1px solid #ddd;
+
+    background: white;
+
+    padding: 10px 18px;
+
+    border-radius: 7px;
+
+    cursor: pointer;
+
+    font-size: 14px;
+
+    transition: 0.2s;
+}
+
+.filter-button:hover {
+    border-color: #e50914;
+    color: #e50914;
+}
+
+.filter-button.active {
+    background: #e50914;
+    color: white;
+    border-color: #e50914;
+}
+
+
+/* BOOKING LIST */
+
+.booking-list {
+    display: flex;
+    flex-direction: column;
+
+    gap: 20px;
+}
+
+
+/* BOOKING CARD */
+
+.booking-card {
+    background: white;
+
+    border-radius: 12px;
+
+    padding: 20px;
+
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+
+    display: grid;
+
+    grid-template-columns: 100px 1fr auto;
+
+    gap: 20px;
+
+    align-items: center;
+}
+
+
+/* POSTER */
+
+.booking-poster {
+    width: 100px;
+    height: 140px;
+
+    border-radius: 8px;
+
+    overflow: hidden;
+
+    background: #eee;
+}
+
+.booking-poster img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+}
+
+
+/* INFO */
+
+.booking-info h2 {
+    font-size: 21px;
+
+    margin-bottom: 12px;
+}
+
+.booking-info p {
+    margin: 7px 0;
+
+    color: #555;
+
+    font-size: 14px;
+}
+
+.booking-info strong {
+    color: #222;
+}
+
+
+/* CODE */
+
+.booking-code {
+    display: inline-block;
+
+    background: #f5f5f5;
+
+    padding: 6px 10px;
+
+    border-radius: 5px;
+
+    font-size: 13px;
+
+    font-weight: bold;
+
+    margin-bottom: 10px;
+}
+
+
+/* STATUS */
+
+.booking-status {
+    display: inline-block;
+
+    padding: 6px 12px;
+
+    border-radius: 20px;
+
+    font-size: 13px;
+
+    font-weight: 600;
+}
+
+.status-upcoming {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.status-completed {
+    background: #eeeeee;
+    color: #555;
+}
+
+.status-cancelled {
+    background: #ffebee;
+    color: #c62828;
+}
+
+
+/* RIGHT */
+
+.booking-right {
+    text-align: right;
+
+    min-width: 150px;
+}
+
+.booking-price {
+    font-size: 20px;
+
+    font-weight: bold;
+
+    color: #e50914;
+
+    margin-bottom: 15px;
+}
+
+
+/* BUTTON */
+
+.detail-button {
+    display: inline-block;
+
+    background: #e50914;
+
+    color: white;
+
+    text-decoration: none;
+
+    padding: 10px 18px;
+
+    border-radius: 7px;
+
+    font-size: 14px;
+}
+
+.detail-button:hover {
+    background: #c80710;
+}
+
+
+/* EMPTY */
+
+.empty-booking {
+    text-align: center;
+
+    padding: 70px 20px;
+
+    background: white;
+
+    border-radius: 12px;
+
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.06);
+
+    display: none;
+}
+
+.empty-icon {
+    font-size: 55px;
+
+    margin-bottom: 15px;
+}
+
+.empty-booking h2 {
+    margin-bottom: 10px;
+}
+
+.empty-booking p {
+    color: #777;
+
+    margin-bottom: 20px;
+}
+
+
+/* MOVIE BUTTON */
+
+.movie-button {
+    display: inline-block;
+
+    padding: 12px 22px;
+
+    border-radius: 7px;
+
+    background: #e50914;
+
+    color: white;
+
+    text-decoration: none;
+}
+
+.movie-button:hover {
+    background: #c80710;
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 800px) {
+
+    .booking-card {
+        grid-template-columns: 80px 1fr;
+    }
+
+    .booking-poster {
+        width: 80px;
+        height: 115px;
+    }
+
+    .booking-right {
+        grid-column: 1 / -1;
+
+        text-align: left;
+
+        border-top: 1px solid #eee;
+
+        padding-top: 15px;
+    }
+
+}
+
+
+@media (max-width: 500px) {
+
+    .history-container {
+        margin-top: 25px;
+    }
+
+    .history-title h1 {
+        font-size: 27px;
+    }
+
+    .booking-card {
+        padding: 15px;
+
+        gap: 15px;
+    }
+
+    .booking-info h2 {
+        font-size: 17px;
+    }
+
+}

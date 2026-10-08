@@ -1,0 +1,200 @@
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #ffffff;
+    color: #222222;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.main-header {
+    position: relative;
+    z-index: 100;
+    background: #111111;
+}
+
+.main-header .navbar {
+    min-height: 75px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 21px;
+    font-weight: 800;
+}
+
+.logo i {
+    margin-right: 5px;
+    color: #e50914;
+    font-size: 27px;
+}
+
+.logo strong {
+    color: #e50914;
+}
+
+.main-header .nav-link {
+    padding: 10px 15px !important;
+    color: #dddddd !important;
+    font-weight: 600;
+}
+
+.main-header .nav-link:hover,
+.main-header .nav-link.active {
+    color: #ffffff !important;
+}
+
+.main-header .nav-link.active {
+    border-bottom: 2px solid #e50914;
+}
+
+.header-account {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-login,
+.btn-register {
+    padding: 8px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.btn-login {
+    color: #ffffff;
+}
+
+.btn-login:hover {
+    color: #e50914;
+}
+
+.btn-register {
+    background: #e50914;
+    color: #ffffff;
+}
+
+.btn-register:hover {
+    background: #b20710;
+    color: #ffffff;
+}
+
+
+@media (max-width: 991px) {
+
+    .header-account {
+        margin-top: 15px;
+        padding-bottom: 15px;
+    }
+
+}
+
+/* =====================================================
+   ACCOUNT HEADER
+   DUNG CHUNG CHO TAT CA CAC TRANG
+===================================================== */
+
+.header-account {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+
+/* ================= LOGIN ================= */
+
+.btn-login,
+.btn-register,
+.btn-welcome,
+.btn-logout {
+    align-items: center;
+    gap: 6px;
+
+    text-decoration: none;
+    white-space: nowrap;
+
+    transition: 0.2s;
+}
+
+
+/* ================= XIN CHAO ================= */
+
+.btn-welcome {
+    color: #ffffff !important;
+    cursor: default;
+}
+
+.btn-welcome i {
+    color: #ffffff !important;
+}
+
+.btn-welcome strong {
+    color: #ffcc00 !important;
+    margin-left: 3px;
+}
+
+
+/* ================= DANG XUAT ================= */
+
+.btn-logout {
+    color: #ffffff !important;
+    text-decoration: none !important;
+}
+
+.btn-logout i {
+    color: #ffffff !important;
+}
+
+.btn-logout:hover {
+    color: #ffcc00 !important;
+}
+
+.btn-logout:hover i {
+    color: #ffcc00 !important;
+}
+
+
+/* ================= DANG NHAP / DANG KY ================= */
+
+.btn-login {
+    color: #ffffff;
+}
+
+.btn-register {
+    color: #ffffff;
+}
+
+.btn-login:hover,
+.btn-register:hover {
+    color: #ffcc00;
+}
+
+
+/* ================= MOBILE ================= */
+
+@media (max-width: 991px) {
+
+    .header-account {
+        margin-top: 15px;
+        padding-bottom: 10px;
+
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+}

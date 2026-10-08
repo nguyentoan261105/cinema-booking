@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Chi tiết phim - Cinema Booking</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+        rel="stylesheet">
+
+    <link rel="stylesheet"
+        href="../../../CSS/movie.css">
+
+    <link rel="stylesheet"
+        href="../../../CSS/site.css">
+
+</head>
+
+<body>
+
+
+<!-- HEADER -->
+
+<header class="main-header">
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+
+        <div class="container">
+
+            <a class="navbar-brand logo"
+               href="../Home/Index.html">
+
+                <i class="bi bi-film"></i>
+
+                <span>CINEMA</span>
+
+                <strong>BOOKING</strong>
+
+            </a>
+
+
+            <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#mainNavbar">
+
+                <span class="navbar-toggler-icon"></span>
+
+            </button>
+
+
+            <div class="collapse navbar-collapse"
+                 id="mainNavbar">
+
+                <ul class="navbar-nav mx-auto">
+
+                    <li class="nav-item">
+
+                        <a class="nav-link"
+                           href="../Home/Index.html">
+
+                            Trang chủ
+
+                        </a>
+
+                    </li>
+
+                    <li class="nav-item">
+
+                        <a class="nav-link active"
+                           href="Index.html">
+
+                            Phim
+
+                        </a>
+
+                    </li>
+
+                    <li class="nav-item">
+
+                        <a class="nav-link"
+                           href="../Cinema/Index.html">
+
+                            Rạp chiếu
+
+                        </a>
+
+                    </li>
+
+                    <li class="nav-item">
+
+                        <a class="nav-link"
+                           href="../Booking/History.html">
+
+                            Vé của tôi
+
+                        </a>
+
+                    </li>
+
+                </ul>
+
+
+                <!-- ================= ACCOUNT ================= -->
+
+                <div class="header-account">
+
+                    <!-- CHUA DANG NHAP -->
+
+                    <a
+                        href="../Account/Login.html"
+                        id="loginLink"
+                        class="btn-login">
+
+                        <i class="bi bi-person"></i>
+
+                        Đăng nhập
+
+                    </a>
+
+
+                    <a
+                        href="../Account/Register.html"
+                        id="registerLink"
+                        class="btn-register">
+
+                        Đăng ký
+
+                    </a>
+
+
+                    <!-- DA DANG NHAP -->
+
+                    <span
+                        id="userWelcome"
+                        class="btn-welcome"
+                        style="display: none;">
+
+                        <i class="bi bi-person-circle"></i>
+
+                        Xin chào,
+
+                        <strong id="userName"></strong>
+
+                    </span>
+
+
+                    <!-- DANG XUAT -->
+
+                    <a
+                        href="javascript:void(0);"
+                        id="logoutLink"
+                        class="btn-logout"
+                        style="display: none;"
+                        onclick="logout(); return false;">
+
+                        <i class="bi bi-box-arrow-right"></i>
+
+                        Đăng xuất
+
+                    </a>
+
+                </div>
+            </div>
+
+        </div>
+
+    </nav>
+
+</header>
+
+
+
+<!-- PAGE BANNER -->
+
+<section class="page-banner">
+
+    <div class="container">
+
+        <div class="page-banner-content">
+
+            <span>THÔNG TIN PHIM</span>
+
+            <h1>Chi tiết phim</h1>
+
+            <p>
+                Thông tin và lịch chiếu phim
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- MOVIE DETAILS -->
+
+<section class="movie-details-page">
+
+    <div class="container">
+
+        <div class="row g-5">
+
+
+            <!-- POSTER -->
+
+            <div class="col-lg-4">
+
+                <div class="details-poster">
+
+                    <img
+                        id="moviePoster"
+                        src="../../../images/movie-1.jpg"
+                        alt="Movie">
+
+                </div>
+
+            </div>
+
+
+            <!-- INFORMATION -->
+
+            <div class="col-lg-8">
+
+                <div class="movie-details-content">
+
+                    <span
+                        id="movieStatus"
+                        class="details-status">
+
+                        ĐANG CHIẾU
+
+                    </span>
+
+
+                    <h1 id="movieTitle">
+
+                        Đang tải...
+
+                    </h1>
+
+
+                    <div class="details-rating">
+
+                        <i class="bi bi-star-fill"></i>
+
+                        <strong id="movieRating">
+                            0.0
+                        </strong>
+
+                        <span>
+                            / 10
+                        </span>
+
+                    </div>
+
+
+                    <div class="details-meta">
+
+                        <div>
+
+                            <i class="bi bi-clock"></i>
+
+                            <span id="movieDuration">
+                                Đang tải...
+                            </span>
+
+                        </div>
+
+
+                        <div>
+
+                            <i class="bi bi-calendar3"></i>
+
+                            <span id="movieRelease">
+                                Đang tải...
+                            </span>
+
+                        </div>
+
+
+                        <div>
+
+                            <i class="bi bi-camera-reels"></i>
+
+                            <span id="movieGenre">
+                                Đang tải...
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <hr>
+
+
+                    <h5>
+                        Nội dung phim
+                    </h5>
+
+                    <p id="movieDescription">
+
+                        Đang tải thông tin phim...
+
+                    </p>
+
+
+                    <div class="movie-info-list">
+
+                        <p>
+
+                            <strong>Đạo diễn:</strong>
+
+                            <span id="movieDirector">
+                                Đang tải...
+                            </span>
+
+                        </p>
+
+
+                        <p>
+
+                            <strong>Diễn viên:</strong>
+
+                            <span id="movieActors">
+                                Đang tải...
+                            </span>
+
+                        </p>
+
+
+                        <p>
+
+                            <strong>Ngôn ngữ:</strong>
+
+                            <span>
+                                Tiếng Anh
+                            </span>
+
+                        </p>
+
+
+                        <p>
+
+                            <strong>Độ tuổi:</strong>
+
+                            <span>
+                                T13
+                            </span>
+
+                        </p>
+
+                    </div>
+
+
+                    <div class="details-buttons">
+
+                        <a
+                            id="bookingButton"
+                            href="../Booking/Showtimes.html?movieId=1"
+                            class="btn-detail-book">
+
+                            <i class="bi bi-ticket-perforated"></i>
+
+                            ĐẶT VÉ NGAY
+
+                        </a>
+
+
+                        <button
+                            type="button"
+                            id="trailerButton"
+                            class="btn-trailer"
+                            onclick="showTrailer()">
+
+                            <i class="bi bi-play-circle"></i>
+
+                            Xem trailer
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- TRAILER MODAL -->
+
+<div
+    class="modal fade"
+    id="trailerModal"
+    tabindex="-1">
+
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h5 class="modal-title">
+                    Trailer
+                </h5>
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+
+            <div class="modal-body">
+
+                <div class="trailer-box">
+
+                    <iframe
+                        id="trailerFrame"
+                        width="100%"
+                        height="400"
+                        src=""
+                        title="Movie Trailer"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen>
+                    </iframe>
+
+                    <p
+                        id="trailerMessage"
+                        style="display:none;">
+
+                        Phim này chưa có trailer.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- FOOTER -->
+
+<footer class="main-footer">
+
+    <div class="container">
+
+        <div class="footer-bottom">
+
+            <span>
+                © 2026 Cinema Booking.
+                All rights reserved.
+            </span>
+
+            <span>
+                Hệ thống đặt vé xem phim trực tuyến
+            </span>
+
+        </div>
+
+    </div>
+
+</footer>
+
+
+
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
+
+<script src="../../../JS/movie-details.js"></script>
+
+<script src="../../../JS/site.js"></script>
+
+</body>
+
+</html>

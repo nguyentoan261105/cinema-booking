@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Cinema Booking - Đặt vé xem phim</title>
+
+    <!-- Bootstrap -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+        rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../../CSS/site.css">
+    <link rel="stylesheet" href="../../../CSS/home.css">
+
+</head>
+
+<body>
+
+    <!-- ================= HEADER ================= -->
+    <header class="main-header">
+
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container">
+
+                <!-- LOGO -->
+                <a class="navbar-brand logo" href="Index.html">
+                    <i class="bi bi-film"></i>
+                    <span>CINEMA</span>
+                    <strong>BOOKING</strong>
+                </a>
+
+                <!-- MOBILE BUTTON -->
+                <button
+                    class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#mainNavbar">
+
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- MENU -->
+                <div class="collapse navbar-collapse" id="mainNavbar">
+
+                    <ul class="navbar-nav mx-auto">
+
+                        <li class="nav-item">
+                            <a class="nav-link active" href="Index.html">
+                                Trang chủ
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="../Movies/Index.html">
+                                Phim
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="../Cinema/Index.html">
+                                Rạp chiếu
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="../Booking/History.html">
+                                Vé của tôi
+                            </a>
+                        </li>
+
+                    </ul>
+
+
+                    <!-- ================= ACCOUNT ================= -->
+
+                    <div class="header-account">
+
+                        <!-- CHUA DANG NHAP -->
+
+                        <a
+                            href="../Account/Login.html"
+                            class="btn-login"
+                            id="loginLink">
+
+                            <i class="bi bi-person"></i>
+
+                            Đăng nhập
+
+                        </a>
+
+
+                        <a
+                            href="../Account/Register.html"
+                            class="btn-register"
+                            id="registerLink">
+
+                            Đăng ký
+
+                        </a>
+
+
+                        <!-- DA DANG NHAP -->
+
+                        <span
+                            class="btn-welcome"
+                            id="userWelcome"
+                            style="display: none;">
+
+                            <i class="bi bi-person-circle"></i>
+
+                            Xin chào,
+
+                            <strong id="userName"></strong>
+
+                        </span>
+
+
+                        <!-- DANG XUAT -->
+
+                        <a
+                            href="javascript:void(0);"
+                            class="btn-logout"
+                            id="logoutLink"
+                            style="display: none;"
+                            onclick="logout()">
+
+                            <i class="bi bi-box-arrow-right"></i>
+
+                            Đăng xuất
+
+                        </a>
+
+                    </div>
+
+                    <!-- ================= END ACCOUNT ================= -->
+
+                </div>
+
+            </div>
+        </nav>
+
+    </header>
+
+
+    <!-- ================= HERO ================= -->
+    <section class="hero-section">
+
+        <div class="hero-overlay"></div>
+
+        <div class="container hero-content">
+
+            <div class="hero-text">
+
+                <span class="hero-small-title">
+                    TRẢI NGHIỆM ĐIỆN ẢNH TUYỆT VỜI
+                </span>
+
+                <h1>
+                    ĐẶT VÉ XEM PHIM
+                    <br>
+                    <span>DỄ DÀNG & NHANH CHÓNG</span>
+                </h1>
+
+                <p>
+                    Khám phá những bộ phim mới nhất,
+                    chọn suất chiếu yêu thích và đặt ghế
+                    ngay hôm nay.
+                </p>
+
+                <div class="hero-buttons">
+
+                    <a
+                        href="../Movies/Index.html"
+                        class="btn-primary-custom">
+
+                        <i class="bi bi-ticket-perforated"></i>
+                        ĐẶT VÉ NGAY
+
+                    </a>
+
+                    <a
+                        href="../Movies/Index.html"
+                        class="btn-outline-custom">
+
+                        XEM PHIM
+                        <i class="bi bi-arrow-right"></i>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= QUICK BOOKING ================= -->
+    <section class="quick-booking">
+
+        <div class="container">
+
+            <div class="booking-box">
+
+                <div class="booking-title">
+
+                    <i class="bi bi-ticket-perforated-fill"></i>
+
+                    <div>
+
+                        <h5>Đặt vé nhanh</h5>
+
+                        <span>
+                            Chọn phim và suất chiếu
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="booking-select">
+
+                    <select
+                        id="movieSelect"
+                        class="form-select">
+
+                        <option value="">
+                            Đang tải phim...
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="booking-select">
+
+                    <select
+                        id="cinemaSelect"
+                        class="form-select">
+
+                        <option value="">
+                            Đang tải rạp...
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="booking-select">
+
+                    <select
+                        id="dateSelect"
+                        class="form-select">
+
+                        <option value="">
+                            Đang tải ngày...
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="btn-booking-search"
+                    onclick="searchShowtime()">
+
+                    <i class="bi bi-search"></i>
+
+                    Tìm suất chiếu
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= NOW SHOWING ================= -->
+    <section class="movie-section">
+
+        <div class="container">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <span>
+                        KHÁM PHÁ
+                    </span>
+
+                    <h2>
+                        PHIM ĐANG CHIẾU
+                    </h2>
+
+                </div>
+
+
+                <a
+                    href="../Movies/Index.html"
+                    class="view-all">
+
+                    Xem tất cả
+
+                    <i class="bi bi-arrow-right"></i>
+
+                </a>
+
+            </div>
+
+
+            <div class="row g-4">
+
+                <!-- MOVIE 1 -->
+
+                <div class="col-lg-3 col-md-6">
+
+                    <div class="movie-card">
+
+                        <div class="movie-poster">
+
+                            <img
+                                src="../../../images/movie-1.jpg"
+                                alt="Avengers End Game">
+
+                            <span class="movie-status">
+                                ĐANG CHIẾU
+                            </span>
+
+                            <div class="movie-overlay">
+
+                                <a
+                                    href="../Movies/Details.html?id=1"
+                                    class="movie-detail-btn">
+
+                                    <i class="bi bi-info-circle"></i>
+
+                                    Chi tiết
+
+                                </a>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="movie-info">
+
+                            <h4>
+                                Avengers: End Game
+                            </h4>
+
+                            <div class="movie-meta">
+
+                                <span>
+
+                                    <i class="bi bi-clock"></i>
+
+                                    181 phút
+
+                                </span>
+
+
+                                <span>
+
+                                    <i class="bi bi-star-fill"></i>
+
+                                    9.2
+
+                                </span>
+
+                            </div>
+
+
+                            <p>
+                                Hành động • Phiêu lưu
+                            </p>
+
+
+                            <a
+                                href="../Booking/Showtimes.html?movieId=1"
+                                class="btn-movie-book">
+
+                                Đặt vé
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- MOVIE 2 -->
+
+                <div class="col-lg-3 col-md-6">
+
+                    <div class="movie-card">
+
+                        <div class="movie-poster">
+
+                            <img
+                                src="../../../images/movie-2.jpg"
+                                alt="Avatar">
+
+                            <span class="movie-status">
+                                ĐANG CHIẾU
+                            </span>
+
+                            <div class="movie-overlay">
+
+                                <a
+                                    href="../Movies/Details.html?id=2"
+                                    class="movie-detail-btn">
+
+                                    <i class="bi bi-info-circle"></i>
+
+                                    Chi tiết
+
+                                </a>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="movie-info">
+
+                            <h4>
+                                Avatar: The Way of Water
+                            </h4>
+
+
+                            <div class="movie-meta">
+
+                                <span>
+
+                                    <i class="bi bi-clock"></i>
+
+                                    192 phút
+
+                                </span>
+
+
+                                <span>
+
+                                    <i class="bi bi-star-fill"></i>
+
+                                    8.8
+
+                                </span>
+
+                            </div>
+
+
+                            <p>
+                                Khoa học viễn tưởng • Phiêu lưu
+                            </p>
+
+
+                            <a
+                                href="../Booking/Showtimes.html?movieId=2"
+                                class="btn-movie-book">
+
+                                Đặt vé
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- MOVIE 3 -->
+
+                <div class="col-lg-3 col-md-6">
+
+                    <div class="movie-card">
+
+                        <div class="movie-poster">
+
+                            <img
+                                src="../../../images/movie-3.jpg"
+                                alt="Spider Man">
+
+                            <span class="movie-status">
+                                ĐANG CHIẾU
+                            </span>
+
+                            <div class="movie-overlay">
+
+                                <a
+                                    href="../Movies/Details.html?id=3"
+                                    class="movie-detail-btn">
+
+                                    <i class="bi bi-info-circle"></i>
+
+                                    Chi tiết
+
+                                </a>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="movie-info">
+
+                            <h4>
+                                Spider-Man
+                            </h4>
+
+
+                            <div class="movie-meta">
+
+                                <span>
+
+                                    <i class="bi bi-clock"></i>
+
+                                    148 phút
+
+                                </span>
+
+
+                                <span>
+
+                                    <i class="bi bi-star-fill"></i>
+
+                                    8.7
+
+                                </span>
+
+                            </div>
+
+
+                            <p>
+                                Hành động • Siêu anh hùng
+                            </p>
+
+
+                            <a
+                                href="../Booking/Showtimes.html?movieId=3"
+                                class="btn-movie-book">
+
+                                Đặt vé
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- MOVIE 4 -->
+
+                <div class="col-lg-3 col-md-6">
+
+                    <div class="movie-card">
+
+                        <div class="movie-poster">
+
+                            <img
+                                src="../../../images/movie-4.jpg"
+                                alt="The Batman">
+
+                            <span class="movie-status">
+                                ĐANG CHIẾU
+                            </span>
+
+                            <div class="movie-overlay">
+
+                                <a
+                                    href="../Movies/Details.html?id=4"
+                                    class="movie-detail-btn">
+
+                                    <i class="bi bi-info-circle"></i>
+
+                                    Chi tiết
+
+                                </a>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="movie-info">
+
+                            <h4>
+                                The Batman
+                            </h4>
+
+
+                            <div class="movie-meta">
+
+                                <span>
+
+                                    <i class="bi bi-clock"></i>
+
+                                    176 phút
+
+                                </span>
+
+
+                                <span>
+
+                                    <i class="bi bi-star-fill"></i>
+
+                                    8.5
+
+                                </span>
+
+                            </div>
+
+
+                            <p>
+                                Hành động • Tội phạm
+                            </p>
+
+
+                            <a
+                                href="../Booking/Showtimes.html?movieId=4"
+                                class="btn-movie-book">
+
+                                Đặt vé
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= FEATURES ================= -->
+    <section class="features-section">
+
+        <div class="container">
+
+            <div class="section-heading center">
+
+                <span>
+                    DỊCH VỤ
+                </span>
+
+                <h2>
+                    TẠI SAO CHỌN CINEMA BOOKING?
+                </h2>
+
+            </div>
+
+
+            <div class="row g-4">
+
+                <div class="col-lg-3 col-md-6">
+
+                    <div class="feature-card">
+
+                        <div class="feature-icon">
+
+                            <i class="bi bi-ticket-perforated"></i>
+
+                        </div>
+
+
+                        <h4>
+                            Đặt vé dễ dàng
+                        </h4>
+
+
+                        <p>
+                            Chọn phim, suất chiếu và ghế
+                            chỉ với vài thao tác.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-lg-3 col-md-6">
+
+                    <div class="feature-card">
+
+                        <div class="feature-icon">
+
+                            <i class="bi bi-grid-3x3-gap"></i>
+
+                        </div>
+
+
+                        <h4>
+                            Chọn ghế trực tuyến
+                        </h4>
+
+
+                        <p>
+                            Xem trực tiếp trạng thái ghế
+                            và chọn vị trí yêu thích.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-lg-3 col-md-6">
+
+                    <div class="feature-card">
+
+                        <div class="feature-icon">
+
+                            <i class="bi bi-cup-straw"></i>
+
+                        </div>
+
+
+                        <h4>
+                            Đặt đồ ăn
+                        </h4>
+
+
+                        <p>
+                            Đặt bắp rang, nước uống và
+                            combo ngay khi mua vé.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-lg-3 col-md-6">
+
+                    <div class="feature-card">
+
+                        <div class="feature-icon">
+
+                            <i class="bi bi-shield-check"></i>
+
+                        </div>
+
+
+                        <h4>
+                            Thanh toán an toàn
+                        </h4>
+
+
+                        <p>
+                            Hỗ trợ nhiều phương thức
+                            thanh toán tiện lợi.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="main-footer">
+
+        <div class="container">
+
+            <div class="row g-4">
+
+                <div class="col-lg-4">
+
+                    <div class="footer-logo">
+
+                        <i class="bi bi-film"></i>
+
+                        CINEMA BOOKING
+
+                    </div>
+
+
+                    <p>
+                        Hệ thống đặt vé xem phim trực tuyến
+                        nhanh chóng và tiện lợi.
+                    </p>
+
+                </div>
+
+
+                <div class="col-lg-2">
+
+                    <h5>
+                        Liên kết
+                    </h5>
+
+
+                    <ul>
+
+                        <li>
+                            <a href="Index.html">
+                                Trang chủ
+                            </a>
+                        </li>
+
+
+                        <li>
+                            <a href="../Movies/Index.html">
+                                Phim
+                            </a>
+                        </li>
+
+
+                        <li>
+                            <a href="../Cinema/Index.html">
+                                Rạp chiếu
+                            </a>
+                        </li>
+
+
+                        <li>
+                            <a href="../Booking/History.html">
+                                Vé của tôi
+                            </a>
+                        </li>
+
+                    </ul>
+
+                </div>
+
+
+                <div class="col-lg-3">
+
+                    <h5>
+                        Hỗ trợ
+                    </h5>
+
+
+                    <ul>
+
+                        <li>
+
+                            <i class="bi bi-telephone"></i>
+
+                            1900 0000
+
+                        </li>
+
+
+                        <li>
+
+                            <i class="bi bi-envelope"></i>
+
+                            support@cinemabooking.vn
+
+                        </li>
+
+
+                        <li>
+
+                            <i class="bi bi-clock"></i>
+
+                            08:00 - 23:00
+
+                        </li>
+
+                    </ul>
+
+                </div>
+
+
+                <div class="col-lg-3">
+
+                    <h5>
+                        Theo dõi chúng tôi
+                    </h5>
+
+
+                    <div class="social-icons">
+
+                        <a href="#">
+                            <i class="bi bi-facebook"></i>
+                        </a>
+
+
+                        <a href="#">
+                            <i class="bi bi-instagram"></i>
+                        </a>
+
+
+                        <a href="#">
+                            <i class="bi bi-youtube"></i>
+                        </a>
+
+
+                        <a href="#">
+                            <i class="bi bi-tiktok"></i>
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="footer-bottom">
+
+                <span>
+                    © 2026 Cinema Booking. All rights reserved.
+                </span>
+
+
+                <span>
+                    Hệ thống đặt vé xem phim trực tuyến
+                </span>
+
+            </div>
+
+        </div>
+
+    </footer>
+
+
+    <!-- Bootstrap JS -->
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+    </script>
+
+
+    <!-- JS dung chung cho tai khoan -->
+    <script src="../../../JS/site.js"></script>
+
+
+    <!-- JavaScript trang chu -->
+    <script src="../../../JS/home.js"></script>
+
+</body>
+
+</html>

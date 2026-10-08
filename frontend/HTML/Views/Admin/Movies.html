@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Quản lý phim - Cinema Booking</title>
+
+
+    <!-- BOOTSTRAP ICONS -->
+
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+
+    <!-- CSS CHUNG -->
+
+    <link
+        rel="stylesheet"
+        href="../../../CSS/site.css">
+
+    <link
+        rel="stylesheet"
+        href="../../../CSS/admin.css">
+
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header class="admin-header">
+
+
+    <div class="admin-header-left">
+
+        <div class="admin-logo">
+
+            <i class="bi bi-camera-reels-fill"></i>
+
+            <span>
+                CINEMA BOOKING
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div class="admin-header-right">
+
+        <div class="admin-user">
+
+            <div class="admin-user-icon">
+
+                <i class="bi bi-person-fill"></i>
+
+            </div>
+
+
+            <div class="admin-user-info">
+
+            <strong id="adminUserName">
+                Administrator
+            </strong>
+
+                <small>
+                    Quản trị viên
+                </small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</header>
+
+
+
+<!-- =====================================================
+     WRAPPER
+===================================================== -->
+
+<div class="admin-wrapper">
+
+
+    <!-- =================================================
+         SIDEBAR
+    ================================================== -->
+
+    <aside class="admin-sidebar">
+
+
+        <!-- TITLE -->
+
+        <div class="admin-sidebar-title">
+
+            QUẢN TRỊ HỆ THỐNG
+
+        </div>
+
+
+        <!-- MENU -->
+
+        <nav class="admin-menu">
+
+
+            <!-- TỔNG QUAN -->
+
+            <a
+                href="Dashboard.html"
+                class="admin-menu-item">
+
+                <i class="bi bi-grid-1x2-fill"></i>
+
+                <span>
+                    Tổng quan
+                </span>
+
+            </a>
+
+
+
+            <!-- QUẢN LÝ PHIM -->
+
+            <a
+                href="Movies.html"
+                class="admin-menu-item active">
+
+                <i class="bi bi-film-fill"></i>
+
+                <span>
+                    Quản lý phim
+                </span>
+
+            </a>
+
+
+
+            <!-- QUẢN LÝ RẠP -->
+
+            <a
+                href="Cinemas.html"
+                class="admin-menu-item">
+
+                <i class="bi bi-building"></i>
+
+                <span>
+                    Quản lý rạp
+                </span>
+
+            </a>
+
+
+
+            <!-- QUẢN LÝ GHẾ -->
+
+            <a
+                href="Seats.html"
+                class="admin-menu-item">
+
+                <i class="bi bi-grid-3x3-gap-fill"></i>
+
+                <span>
+                    Quản lý ghế
+                </span>
+
+            </a>
+
+
+
+            <!-- QUẢN LÝ SUẤT CHIẾU -->
+
+            <a
+                href="Showtimes.html"
+                class="admin-menu-item">
+
+                <i class="bi bi-calendar3"></i>
+
+                <span>
+                    Quản lý suất chiếu
+                </span>
+
+            </a>
+
+
+
+            <!-- QUẢN LÝ ĐẶT VÉ -->
+
+            <a
+                href="Bookings.html"
+                class="admin-menu-item">
+
+                <i class="bi bi-ticket-perforated-fill"></i>
+
+                <span>
+                    Quản lý đặt vé
+                </span>
+
+            </a>
+
+
+
+            <!-- ĐỒ ĂN & THỨC UỐNG -->
+
+            <a
+                href="Foods.html"
+                class="admin-menu-item">
+
+                <i class="bi bi-cup-straw"></i>
+
+                <span>
+                    Đồ ăn & thức uống
+                </span>
+
+            </a>
+
+
+
+            <!-- QUẢN LÝ NHÂN VIÊN -->
+
+            <a
+                href="Users.html"
+                class="admin-menu-item">
+
+                <i class="bi bi-people-fill"></i>
+
+                <span>
+                    Quản lý nhân viên
+                </span>
+
+            </a>
+
+
+
+            <!-- THỐNG KÊ -->
+
+            <a
+                href="Statistics.html"
+                class="admin-menu-item">
+
+                <i class="bi bi-bar-chart-fill"></i>
+
+                <span>
+                    Thống kê
+                </span>
+
+            </a>
+
+
+        </nav>
+
+
+
+        <!-- =================================================
+             SIDEBAR BOTTOM
+        ================================================== -->
+
+        <div class="admin-sidebar-bottom">
+
+
+            <!-- VỀ TRANG KHÁCH HÀNG -->
+
+            <a
+                href="../../../index.html"
+                class="admin-menu-item"
+                >
+
+                <i class="bi bi-house-door-fill"></i>
+
+                    <span>
+                        Về trang khách hàng
+                    </span>
+
+                </a>
+
+
+
+            <!-- ĐĂNG XUẤT -->
+
+            <button
+                type="button"
+                id="adminSidebarLogout"
+                class="admin-menu-item admin-sidebar-logout">
+
+                <i class="bi bi-box-arrow-left"></i>
+
+                    <span>
+                        Đăng xuất
+                    </span>
+
+            </button>
+
+
+        </div>
+
+
+    </aside>
+
+
+
+    <!-- =================================================
+         MAIN
+    ================================================== -->
+
+    <main class="admin-main">
+
+
+        <!-- =================================================
+             PAGE HEADER
+        ================================================== -->
+
+        <div class="admin-page-header">
+
+
+            <div>
+
+                <h1 class="admin-page-title">
+                    Quản lý phim
+                </h1>
+
+                <p>
+                    Quản lý danh sách phim trong hệ thống
+                </p>
+
+            </div>
+
+
+            <button
+                type="button"
+                id="addMovieBtn"
+                class="admin-action-btn">
+
+                <i class="bi bi-plus-lg"></i>
+
+                Thêm phim
+
+            </button>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+             ALERT
+        ================================================== -->
+
+        <div
+            id="moviesAlert"
+            class="admin-alert"
+            style="display:none;">
+        </div>
+
+
+
+        <!-- =================================================
+             SEARCH
+        ================================================== -->
+
+        <div class="admin-filter-box">
+
+
+            <div class="admin-search-box">
+
+                <i class="bi bi-search"></i>
+
+                <input
+                    type="text"
+                    id="movieSearch"
+                    placeholder="Tìm tên phim, thể loại, đạo diễn...">
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+             TABLE
+        ================================================== -->
+
+        <div class="admin-table-card">
+
+
+            <div style="overflow-x:auto;">
+
+
+                <table class="admin-table">
+
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                #
+                            </th>
+
+                            <th>
+                                Phim
+                            </th>
+
+                            <th>
+                                Thể loại
+                            </th>
+
+                            <th>
+                                Thời lượng
+                            </th>
+
+                            <th>
+                                Ngày phát hành
+                            </th>
+
+                            <th>
+                                Rating
+                            </th>
+
+                            <th>
+                                Trạng thái
+                            </th>
+
+                            <th>
+                                Thao tác
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="moviesTable">
+
+
+                        <tr>
+
+                            <td
+                                colspan="8"
+                                style="text-align:center;">
+
+                                Đang tải dữ liệu...
+
+                            </td>
+
+                        </tr>
+
+
+                    </tbody>
+
+
+                </table>
+
+
+            </div>
+
+
+        </div>
+
+
+    </main>
+
+
+</div>
+
+
+
+<!-- =====================================================
+     MODAL THÊM / SỬA PHIM
+===================================================== -->
+
+<div
+    id="movieModal"
+    class="admin-modal"
+    style="display:none;">
+
+
+    <div class="admin-modal-content">
+
+
+        <!-- HEADER -->
+
+        <div class="admin-modal-header">
+
+
+            <h2 id="movieModalTitle">
+                Thêm phim
+            </h2>
+
+
+            <button
+                type="button"
+                id="closeMovieModal"
+                class="admin-modal-close">
+
+                <i class="bi bi-x-lg"></i>
+
+            </button>
+
+
+        </div>
+
+
+
+        <!-- FORM -->
+
+        <form id="movieForm">
+
+
+            <input
+                type="hidden"
+                id="movieId">
+
+
+
+            <!-- TÊN + THỜI LƯỢNG -->
+
+            <div class="movie-form-row">
+
+
+                <div class="movie-form-group">
+
+                    <label for="movieTitle">
+                        Tên phim *
+                    </label>
+
+                    <input
+                        type="text"
+                        id="movieTitle"
+                        placeholder="Nhập tên phim"
+                        required>
+
+                </div>
+
+
+
+                <div class="movie-form-group">
+
+                    <label for="movieDuration">
+                        Thời lượng (phút) *
+                    </label>
+
+                    <input
+                        type="number"
+                        id="movieDuration"
+                        min="1"
+                        placeholder="Ví dụ: 120"
+                        required>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- THỂ LOẠI + RATING -->
+
+            <div class="movie-form-row">
+
+
+                <div class="movie-form-group">
+
+                    <label for="movieGenre">
+                        Thể loại
+                    </label>
+
+                    <input
+                        type="text"
+                        id="movieGenre"
+                        placeholder="Ví dụ: Hành động, Phiêu lưu">
+
+                </div>
+
+
+
+                <div class="movie-form-group">
+
+                    <label for="movieRating">
+                        Rating
+                    </label>
+
+                    <input
+                        type="number"
+                        id="movieRating"
+                        min="0"
+                        max="10"
+                        step="0.1"
+                        placeholder="0 - 10">
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- NGÀY PHÁT HÀNH -->
+
+            <div class="movie-form-group">
+
+                <label for="movieReleaseDate">
+                    Ngày phát hành
+                </label>
+
+                <input
+                    type="date"
+                    id="movieReleaseDate">
+
+            </div>
+
+
+
+            <!-- ĐẠO DIỄN + DIỄN VIÊN -->
+
+            <div class="movie-form-row">
+
+
+                <div class="movie-form-group">
+
+                    <label for="movieDirector">
+                        Đạo diễn
+                    </label>
+
+                    <input
+                        type="text"
+                        id="movieDirector"
+                        placeholder="Nhập tên đạo diễn">
+
+                </div>
+
+
+
+                <div class="movie-form-group">
+
+                    <label for="movieActors">
+                        Diễn viên
+                    </label>
+
+                    <input
+                        type="text"
+                        id="movieActors"
+                        placeholder="Nhập tên diễn viên">
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- MÔ TẢ -->
+
+            <div class="movie-form-group">
+
+                <label for="movieDescription">
+                    Mô tả
+                </label>
+
+                <textarea
+                    id="movieDescription"
+                    placeholder="Nhập mô tả phim..."></textarea>
+
+            </div>
+
+
+
+            <!-- POSTER -->
+
+            <div class="movie-form-group">
+
+                <label for="moviePosterUrl">
+                    Poster URL
+                </label>
+
+                <input
+                    type="text"
+                    id="moviePosterUrl"
+                    placeholder="Ví dụ: /images/movie-1.jpg">
+
+
+                <div
+                    id="moviePreview"
+                    class="movie-preview"
+                    style="display:none;">
+
+                    <img
+                        id="moviePreviewImage"
+                        src=""
+                        alt="Poster preview">
+
+                </div>
+
+            </div>
+
+
+
+            <!-- TRAILER -->
+
+            <div class="movie-form-group">
+
+                <label for="movieTrailerUrl">
+                    Trailer URL
+                </label>
+
+                <input
+                    type="text"
+                    id="movieTrailerUrl"
+                    placeholder="Nhập link trailer">
+
+            </div>
+
+
+
+            <!-- ACTIVE -->
+
+            <div class="movie-active">
+
+                <input
+                    type="checkbox"
+                    id="movieIsActive"
+                    checked>
+
+                <label for="movieIsActive">
+                    Phim đang hoạt động
+                </label>
+
+            </div>
+
+
+        </form>
+
+
+
+        <!-- FOOTER -->
+
+        <div class="admin-modal-footer">
+
+
+            <button
+                type="button"
+                id="cancelMovieBtn"
+                class="admin-modal-cancel">
+
+                Hủy
+
+            </button>
+
+
+            <button
+                type="submit"
+                form="movieForm"
+                id="saveMovieBtn"
+                class="admin-modal-save">
+
+                Lưu
+
+            </button>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+<script src="../../../JS/movies.js"></script>
+
+
+</body>
+
+</html>

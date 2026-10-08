@@ -1,0 +1,632 @@
+/* =====================================================
+   SUCCESS CONTAINER
+===================================================== */
+
+.success-container {
+    max-width: 900px;
+
+    margin: 50px auto;
+
+    padding: 0 20px;
+
+    text-align: center;
+}
+
+
+/* =====================================================
+   SUCCESS ICON
+===================================================== */
+
+.success-icon {
+    width: 75px;
+
+    height: 75px;
+
+    margin: 0 auto 20px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #e50914;
+
+    color: #fff;
+
+    font-size: 42px;
+
+    font-weight: bold;
+
+    box-shadow: 0 8px 25px rgba(229, 9, 20, 0.25);
+}
+
+
+.success-container > h1 {
+    font-size: 32px;
+
+    margin-bottom: 10px;
+}
+
+
+.success-message {
+    color: #777;
+
+    margin-bottom: 30px;
+}
+
+
+/* =====================================================
+   BOOKING CODE
+===================================================== */
+
+.booking-code-box {
+    display: inline-flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 5px;
+
+    padding: 15px 35px;
+
+    margin-bottom: 30px;
+
+    border-radius: 10px;
+
+    background: #fff;
+
+    border: 1px dashed #e50914;
+
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.06);
+}
+
+.booking-code-box span {
+    color: #777;
+
+    font-size: 13px;
+}
+
+.booking-code-box strong {
+    color: #e50914;
+
+    font-size: 22px;
+
+    letter-spacing: 1px;
+}
+
+
+/* =====================================================
+   TICKET
+===================================================== */
+
+.ticket-card {
+    background: #fff;
+
+    border-radius: 14px;
+
+    overflow: hidden;
+
+    text-align: left;
+
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+
+    margin-bottom: 25px;
+}
+
+
+/* =====================================================
+   TICKET HEADER
+===================================================== */
+
+.ticket-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 22px 25px;
+
+    background: #111;
+
+    color: #fff;
+}
+
+.ticket-header h2 {
+    margin: 0;
+
+    color: #e50914;
+
+    font-size: 24px;
+}
+
+.ticket-header span {
+    color: #aaa;
+
+    font-size: 11px;
+
+    letter-spacing: 2px;
+}
+
+
+.ticket-status {
+    padding: 7px 12px;
+
+    border-radius: 20px;
+
+    background: #e50914;
+
+    color: #fff;
+
+    font-size: 11px;
+
+    font-weight: bold;
+}
+
+
+/* =====================================================
+   MOVIE
+===================================================== */
+
+.ticket-movie {
+    display: flex;
+
+    gap: 20px;
+
+    padding: 25px;
+
+    border-bottom: 1px dashed #ddd;
+}
+
+
+.ticket-poster {
+    width: 90px;
+
+    height: 125px;
+
+    overflow: hidden;
+
+    border-radius: 7px;
+
+    background: #eee;
+
+    flex-shrink: 0;
+}
+
+.ticket-poster img {
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+}
+
+
+.ticket-movie-info {
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+}
+
+.ticket-movie-info h3 {
+    font-size: 23px;
+
+    margin-bottom: 8px;
+}
+
+.ticket-movie-info p {
+    color: #777;
+
+    margin: 0;
+}
+
+
+/* =====================================================
+   TICKET INFO
+===================================================== */
+
+.ticket-info-grid {
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 20px;
+
+    padding: 25px;
+
+    border-bottom: 1px dashed #ddd;
+}
+
+
+.ticket-info-item {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 4px;
+}
+
+.ticket-info-item span {
+    color: #888;
+
+    font-size: 13px;
+}
+
+.ticket-info-item strong {
+    color: #222;
+
+    font-size: 15px;
+}
+
+
+/* =====================================================
+   FOOD
+===================================================== */
+
+.ticket-food {
+    padding: 25px;
+
+    border-bottom: 1px dashed #ddd;
+}
+
+.ticket-food h3 {
+    font-size: 17px;
+
+    margin-bottom: 15px;
+}
+
+
+.food-ticket-item {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 9px 0;
+
+    border-bottom: 1px solid #eee;
+}
+
+.food-ticket-item:last-child {
+    border-bottom: none;
+}
+
+.food-ticket-item span {
+    color: #666;
+
+    font-size: 14px;
+}
+
+.food-ticket-item strong {
+    font-size: 14px;
+}
+
+
+.empty-food {
+    color: #888;
+
+    margin: 0;
+}
+
+
+/* =====================================================
+   TOTAL
+===================================================== */
+
+.ticket-total {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 22px 25px;
+
+    background: #fafafa;
+}
+
+.ticket-total span {
+    font-size: 16px;
+
+    font-weight: 600;
+}
+
+.ticket-total strong {
+    color: #e50914;
+
+    font-size: 24px;
+}
+
+
+/* =====================================================
+   QR
+===================================================== */
+
+.ticket-qr-section {
+    padding: 25px;
+
+    text-align: center;
+
+    border-top: 1px dashed #ddd;
+}
+
+.ticket-qr {
+    width: 170px;
+
+    height: 170px;
+
+    margin: 0 auto 12px;
+
+    padding: 8px;
+
+    border: 1px solid #ddd;
+
+    border-radius: 8px;
+
+    background: #fff;
+}
+
+.ticket-qr img {
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+}
+
+.ticket-qr-section p {
+    color: #777;
+
+    font-size: 13px;
+
+    margin: 0;
+}
+
+
+/* =====================================================
+   CUSTOMER
+===================================================== */
+
+.customer-ticket-info {
+    background: #fff;
+
+    padding: 25px;
+
+    border-radius: 12px;
+
+    text-align: left;
+
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.07);
+
+    margin-bottom: 25px;
+}
+
+.customer-ticket-info h3 {
+    font-size: 18px;
+
+    margin-bottom: 18px;
+}
+
+
+.customer-row {
+    display: flex;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 10px 0;
+
+    border-bottom: 1px solid #eee;
+}
+
+.customer-row:last-child {
+    border-bottom: none;
+}
+
+.customer-row span {
+    color: #777;
+}
+
+.customer-row strong {
+    color: #222;
+
+    text-align: right;
+}
+
+
+/* =====================================================
+   ACTION BUTTONS
+===================================================== */
+
+.success-actions {
+    display: flex;
+
+    justify-content: center;
+
+    gap: 12px;
+
+    margin-bottom: 25px;
+}
+
+
+.secondary-button,
+.primary-button {
+    border: none;
+
+    border-radius: 7px;
+
+    padding: 12px 20px;
+
+    font-size: 14px;
+
+    cursor: pointer;
+
+    transition: 0.25s;
+}
+
+
+.secondary-button {
+    background: #eee;
+
+    color: #333;
+}
+
+.secondary-button:hover {
+    background: #ddd;
+}
+
+
+.primary-button {
+    background: #e50914;
+
+    color: #fff;
+
+    font-weight: 600;
+}
+
+.primary-button:hover {
+    background: #c80710;
+}
+
+
+/* =====================================================
+   BACK HOME
+===================================================== */
+
+.back-home {
+    margin-bottom: 20px;
+}
+
+.back-home a {
+    color: #e50914;
+
+    font-size: 14px;
+
+    text-decoration: none;
+}
+
+.back-home a:hover {
+    text-decoration: underline;
+}
+
+
+/* =====================================================
+   PRINT
+===================================================== */
+
+@media print {
+
+    .main-header,
+    .main-footer,
+    .success-actions,
+    .back-home,
+    .success-icon,
+    .success-message,
+    .booking-code-box {
+        display: none !important;
+    }
+
+    .success-container {
+        max-width: 100%;
+
+        margin: 0;
+
+        padding: 0;
+    }
+
+    .ticket-card,
+    .customer-ticket-info {
+        box-shadow: none;
+
+        border: 1px solid #ddd;
+    }
+
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 600px) {
+
+    .success-container {
+        margin: 30px auto;
+    }
+
+
+    .success-container > h1 {
+        font-size: 27px;
+    }
+
+
+    .ticket-header {
+        padding: 18px;
+    }
+
+
+    .ticket-movie {
+        padding: 18px;
+    }
+
+
+    .ticket-info-grid {
+        grid-template-columns: 1fr;
+
+        padding: 18px;
+
+        gap: 15px;
+    }
+
+
+    .ticket-food {
+        padding: 18px;
+    }
+
+
+    .ticket-total {
+        padding: 18px;
+    }
+
+
+    .ticket-qr-section {
+        padding: 18px;
+    }
+
+
+    .customer-ticket-info {
+        padding: 18px;
+    }
+
+
+    .customer-row {
+        flex-direction: column;
+
+        gap: 3px;
+    }
+
+
+    .customer-row strong {
+        text-align: left;
+    }
+
+
+    .success-actions {
+        flex-direction: column;
+    }
+
+
+    .secondary-button,
+    .primary-button {
+        width: 100%;
+    }
+
+}

@@ -1,0 +1,414 @@
+.confirm-container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.confirm-title {
+    margin-bottom: 30px;
+}
+
+.confirm-title h1 {
+    font-size: 32px;
+    margin-bottom: 8px;
+}
+
+.confirm-title p {
+    color: #777;
+}
+
+
+.confirm-layout {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 25px;
+}
+
+
+.confirm-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 20px;
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+}
+
+.confirm-card h2 {
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+
+.movie-info {
+    display: flex;
+    gap: 20px;
+}
+
+
+.movie-poster {
+    width: 120px;
+    height: 170px;
+    overflow: hidden;
+    border-radius: 8px;
+    background: #eee;
+    flex-shrink: 0;
+}
+
+.movie-poster img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+
+.movie-details h3 {
+    font-size: 23px;
+    margin-bottom: 15px;
+}
+
+.movie-details p {
+    margin: 10px 0;
+    color: #555;
+}
+
+.movie-details strong {
+    color: #222;
+}
+
+
+.ticket-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ticket-row p {
+    margin-top: 5px;
+    color: #777;
+}
+
+
+#foodList {
+    margin-bottom: 15px;
+}
+
+.food-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 12px 0;
+
+    border-bottom: 1px solid #eee;
+}
+
+.food-item:last-child {
+    border-bottom: none;
+}
+
+.food-info strong {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.food-info span {
+    color: #777;
+    font-size: 14px;
+}
+
+
+.food-total-row {
+    display: flex;
+    justify-content: space-between;
+
+    border-top: 1px solid #ddd;
+
+    padding-top: 15px;
+
+    font-size: 17px;
+}
+
+
+.empty-food {
+    color: #888;
+    text-align: center;
+    padding: 15px 0;
+}
+
+
+/* CUSTOMER */
+
+.customer-form {
+    display: grid;
+    gap: 18px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.form-group label {
+    font-weight: 600;
+}
+
+.form-group input {
+    padding: 12px 14px;
+
+    border: 1px solid #ddd;
+    border-radius: 7px;
+
+    outline: none;
+
+    font-size: 15px;
+}
+
+.form-group input:focus {
+    border-color: #e50914;
+}
+
+
+/* PRICE */
+
+.confirm-right {
+    position: relative;
+}
+
+.price-card {
+    background: #fff;
+
+    padding: 25px;
+
+    border-radius: 12px;
+
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+
+    position: sticky;
+
+    top: 20px;
+}
+
+.price-card h2 {
+    font-size: 22px;
+    margin-bottom: 25px;
+}
+
+
+.price-row {
+    display: flex;
+    justify-content: space-between;
+
+    margin-bottom: 15px;
+
+    color: #555;
+}
+
+.price-row strong {
+    color: #222;
+}
+
+
+.price-divider {
+    height: 1px;
+
+    background: #ddd;
+
+    margin: 20px 0;
+}
+
+
+.total-row {
+    display: flex;
+    justify-content: space-between;
+
+    align-items: center;
+
+    font-size: 19px;
+}
+
+.total-row strong {
+    color: #e50914;
+    font-size: 25px;
+}
+
+
+.payment-note {
+    display: flex;
+    gap: 10px;
+
+    background: #f5f5f5;
+
+    padding: 12px;
+
+    border-radius: 7px;
+
+    margin: 20px 0;
+
+    font-size: 13px;
+
+    color: #666;
+}
+
+.payment-note p {
+    margin: 0;
+}
+
+
+.back-button,
+.payment-button {
+    width: 100%;
+
+    border: none;
+
+    border-radius: 7px;
+
+    padding: 13px;
+
+    font-size: 16px;
+
+    cursor: pointer;
+}
+
+
+.back-button {
+    background: #eee;
+    color: #333;
+
+    margin-bottom: 10px;
+}
+
+.back-button:hover {
+    background: #ddd;
+}
+
+
+.payment-button {
+    background: #e50914;
+    color: white;
+}
+
+.payment-button:hover {
+    background: #c80710;
+}
+
+
+/* PROGRESS */
+
+.booking-progress {
+    max-width: 1000px;
+
+    margin: 30px auto;
+
+    padding: 0 20px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+}
+
+.progress-item {
+    text-align: center;
+
+    color: #aaa;
+
+    min-width: 90px;
+}
+
+.progress-item span {
+    width: 35px;
+    height: 35px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    margin: 0 auto 7px;
+
+    border-radius: 50%;
+
+    background: #ddd;
+
+    color: #666;
+
+    font-weight: bold;
+}
+
+.progress-item p {
+    margin: 0;
+
+    font-size: 13px;
+}
+
+
+.progress-item.completed span,
+.progress-item.active span {
+    background: #e50914;
+    color: white;
+}
+
+.progress-item.completed,
+.progress-item.active {
+    color: #e50914;
+}
+
+
+.progress-line {
+    width: 70px;
+    height: 3px;
+
+    background: #ddd;
+
+    margin-bottom: 22px;
+}
+
+.completed-line,
+.active-line {
+    background: #e50914;
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 900px) {
+
+    .confirm-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .confirm-right {
+        order: -1;
+    }
+
+    .price-card {
+        position: static;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .movie-info {
+        flex-direction: column;
+    }
+
+    .movie-poster {
+        width: 100px;
+        height: 140px;
+    }
+
+    .booking-progress {
+        overflow-x: auto;
+
+        justify-content: flex-start;
+    }
+
+    .progress-line {
+        width: 30px;
+    }
+
+}

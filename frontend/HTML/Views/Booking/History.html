@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Vé của tôi - CINEMA</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+        rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="../../../CSS/site.css">
+
+    <link rel="stylesheet"
+          href="../../../CSS/booking.css">
+
+    <link rel="stylesheet" href="../../../CSS/history.css">
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="main-header">
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+
+        <div class="container">
+
+            <a class="navbar-brand logo"
+               href="../Home/Index.html">
+
+                <i class="bi bi-film"></i>
+
+                <span>CINEMA</span>
+
+                <strong>BOOKING</strong>
+
+            </a>
+
+
+            <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#mainNavbar">
+
+                <span class="navbar-toggler-icon"></span>
+
+            </button>
+
+
+            <div class="collapse navbar-collapse"
+                 id="mainNavbar">
+
+                <ul class="navbar-nav mx-auto">
+
+                    <li class="nav-item">
+
+                        <a class="nav-link"
+                           href="../Home/Index.html">
+
+                            Trang chủ
+
+                        </a>
+
+                    </li>
+
+                    <li class="nav-item">
+
+                        <a class="nav-link"
+                           href="../Movies/Index.html">
+
+                            Phim
+
+                        </a>
+
+                    </li>
+
+                    <li class="nav-item">
+
+                        <a class="nav-link"
+                           href="../Cinema/Index.html">
+
+                            Rạp chiếu
+
+                        </a>
+
+                    </li>
+
+                    <li class="nav-item">
+
+                        <a class="nav-link"
+                           href="History.html">
+
+                            Vé của tôi
+
+                        </a>
+
+                    </li>
+
+                </ul>
+
+
+                                <!-- ================= ACCOUNT ================= -->
+
+                <div class="header-account">
+
+                    <!-- CHUA DANG NHAP -->
+
+                    <a
+                        href="../Account/Login.html"
+                        id="loginLink"
+                        class="btn-login">
+
+                        <i class="bi bi-person"></i>
+
+                        Đăng nhập
+
+                    </a>
+
+
+                    <a
+                        href="../Account/Register.html"
+                        id="registerLink"
+                        class="btn-register">
+
+                        Đăng ký
+
+                    </a>
+
+
+                    <!-- DA DANG NHAP -->
+
+                    <span
+                        id="userWelcome"
+                        class="btn-welcome"
+                        style="display: none;">
+
+                        <i class="bi bi-person-circle"></i>
+
+                        Xin chào,
+
+                        <strong id="userName"></strong>
+
+                    </span>
+
+
+                    <!-- DANG XUAT -->
+
+                    <a
+                        href="javascript:void(0);"
+                        id="logoutLink"
+                        class="btn-logout"
+                        style="display: none;"
+                        onclick="logout(); return false;">
+
+                        <i class="bi bi-box-arrow-right"></i>
+
+                        Đăng xuất
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+</header>
+
+
+    <!-- PAGE -->
+    <main class="history-container">
+
+        <div class="history-title">
+            <h1>Vé của tôi</h1>
+
+            <p>
+                Quản lý và xem lại các vé bạn đã đặt
+            </p>
+        </div>
+
+
+        <!-- FILTER -->
+
+        <div class="history-filter">
+
+            <button class="filter-button active" data-filter="all">
+                Tất cả
+            </button>
+
+            <button class="filter-button" data-filter="upcoming">
+                Sắp chiếu
+            </button>
+
+            <button class="filter-button" data-filter="completed">
+                Đã sử dụng
+            </button>
+
+            <button class="filter-button" data-filter="cancelled">
+                Đã hủy
+            </button>
+
+        </div>
+
+
+        <!-- BOOKING LIST -->
+
+        <div id="bookingList" class="booking-list">
+
+            <!-- JavaScript render -->
+
+        </div>
+
+
+        <!-- EMPTY -->
+
+        <div id="emptyBooking" class="empty-booking">
+
+            <div class="empty-icon">
+                🎟️
+            </div>
+
+            <h2>Chưa có vé nào</h2>
+
+            <p>
+                Bạn chưa có lịch sử đặt vé.
+            </p>
+
+            <a href="../Movies/Index.html" class="movie-button">
+                Xem phim
+            </a>
+
+        </div>
+
+    </main>
+
+
+    <!-- FOOTER -->
+
+    <footer class="main-footer">
+
+    <div class="container">
+
+        <div class="footer-bottom">
+
+            <span>
+                © 2026 Cinema Booking.
+                All rights reserved.
+            </span>
+
+            <span>
+                Hệ thống đặt vé xem phim trực tuyến
+            </span>
+
+        </div>
+
+    </div>
+
+</footer>
+
+
+    <script src="../../../JS/history.js"></script>
+
+    <script src="../../../JS/site.js"></script>
+
+</body>
+</html>

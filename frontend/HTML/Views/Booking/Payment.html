@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Thanh toán - Cinema</title>
+
+    <!-- CSS DUNG CHUNG -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+        rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="../../../CSS/site.css">
+
+    <link rel="stylesheet"
+          href="../../../CSS/booking.css">
+
+    <!-- CSS RIENG PAYMENT -->
+    <link
+        rel="stylesheet"
+        href="../../../CSS/payment.css">
+
+</head>
+
+<body>
+
+
+    <!-- ==============================
+         HEADER
+    =============================== -->
+
+   <header class="main-header">
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+
+        <div class="container">
+
+            <a class="navbar-brand logo"
+               href="../Home/Index.html">
+
+                <i class="bi bi-film"></i>
+
+                <span>CINEMA</span>
+
+                <strong>BOOKING</strong>
+
+            </a>
+
+
+            <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#mainNavbar">
+
+                <span class="navbar-toggler-icon"></span>
+
+            </button>
+
+
+            <div class="collapse navbar-collapse"
+                 id="mainNavbar">
+
+                <ul class="navbar-nav mx-auto">
+
+                    <li class="nav-item">
+
+                        <a class="nav-link"
+                           href="../Home/Index.html">
+
+                            Trang chủ
+
+                        </a>
+
+                    </li>
+
+                    <li class="nav-item">
+
+                        <a class="nav-link"
+                           href="../Movies/Index.html">
+
+                            Phim
+
+                        </a>
+
+                    </li>
+
+                    <li class="nav-item">
+
+                        <a class="nav-link"
+                           href="../Cinema/Index.html">
+
+                            Rạp chiếu
+
+                        </a>
+
+                    </li>
+
+                    <li class="nav-item">
+
+                        <a class="nav-link"
+                           href="History.html">
+
+                            Vé của tôi
+
+                        </a>
+
+                    </li>
+
+                </ul>
+
+
+                                <!-- ================= ACCOUNT ================= -->
+
+                <div class="header-account">
+
+                    <!-- CHUA DANG NHAP -->
+
+                    <a
+                        href="../Account/Login.html"
+                        id="loginLink"
+                        class="btn-login">
+
+                        <i class="bi bi-person"></i>
+
+                        Đăng nhập
+
+                    </a>
+
+
+                    <a
+                        href="../Account/Register.html"
+                        id="registerLink"
+                        class="btn-register">
+
+                        Đăng ký
+
+                    </a>
+
+
+                    <!-- DA DANG NHAP -->
+
+                    <span
+                        id="userWelcome"
+                        class="btn-welcome"
+                        style="display: none;">
+
+                        <i class="bi bi-person-circle"></i>
+
+                        Xin chào,
+
+                        <strong id="userName"></strong>
+
+                    </span>
+
+
+                    <!-- DANG XUAT -->
+
+                    <a
+                        href="javascript:void(0);"
+                        id="logoutLink"
+                        class="btn-logout"
+                        style="display: none;"
+                        onclick="logout(); return false;">
+
+                        <i class="bi bi-box-arrow-right"></i>
+
+                        Đăng xuất
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+</header>
+
+
+
+    <!-- ==============================
+         BOOKING PROGRESS
+    =============================== -->
+
+    <section class="booking-progress">
+
+        <div class="progress-item completed">
+
+            <span>1</span>
+
+            <p>Suất chiếu</p>
+
+        </div>
+
+
+        <div class="progress-line completed-line"></div>
+
+
+        <div class="progress-item completed">
+
+            <span>2</span>
+
+            <p>Chọn ghế</p>
+
+        </div>
+
+
+        <div class="progress-line completed-line"></div>
+
+
+        <div class="progress-item completed">
+
+            <span>3</span>
+
+            <p>Đồ ăn</p>
+
+        </div>
+
+
+        <div class="progress-line completed-line"></div>
+
+
+        <div class="progress-item completed">
+
+            <span>4</span>
+
+            <p>Xác nhận</p>
+
+        </div>
+
+
+        <div class="progress-line active-line"></div>
+
+
+        <div class="progress-item active">
+
+            <span>5</span>
+
+            <p>Thanh toán</p>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ==============================
+         MAIN
+    =============================== -->
+
+    <main class="payment-container">
+
+
+        <div class="payment-title">
+
+            <h1>
+                Thanh toán
+            </h1>
+
+            <p>
+                Chọn phương thức thanh toán phù hợp với bạn.
+            </p>
+
+        </div>
+
+
+
+        <div class="payment-layout">
+
+
+            <!-- ==========================
+                 LEFT
+            =========================== -->
+
+            <section class="payment-left">
+
+
+                <!-- THONG TIN DON HANG -->
+
+                <div class="payment-card">
+
+                    <h2>
+                        🎬 Thông tin đặt vé
+                    </h2>
+
+
+                    <div class="booking-info">
+
+                        <div class="info-row">
+
+                            <span>
+                                Phim
+                            </span>
+
+                            <strong id="movieName">
+                                Đang tải...
+                            </strong>
+
+                        </div>
+
+
+                        <div class="info-row">
+
+                            <span>
+                                Rạp
+                            </span>
+
+                            <strong id="cinemaName">
+                                -
+                            </strong>
+
+                        </div>
+
+
+                        <div class="info-row">
+
+                            <span>
+                                Ngày
+                            </span>
+
+                            <strong id="showDate">
+                                -
+                            </strong>
+
+                        </div>
+
+
+                        <div class="info-row">
+
+                            <span>
+                                Suất chiếu
+                            </span>
+
+                            <strong id="showTime">
+                                -
+                            </strong>
+
+                        </div>
+
+
+                        <div class="info-row">
+
+                            <span>
+                                Ghế
+                            </span>
+
+                            <strong id="seatList">
+                                -
+                            </strong>
+
+                        </div>
+
+
+                        <div class="info-row">
+
+                            <span>
+                                Khách hàng
+                            </span>
+
+                            <strong id="customerName">
+                                -
+                            </strong>
+
+                        </div>
+
+
+                        <div class="info-row">
+
+                            <span>
+                                Email
+                            </span>
+
+                            <strong id="customerEmail">
+                                -
+                            </strong>
+
+                        </div>
+
+
+                        <div class="info-row">
+
+                            <span>
+                                Số điện thoại
+                            </span>
+
+                            <strong id="customerPhone">
+                                -
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- PHUONG THUC THANH TOAN -->
+
+                <div class="payment-card">
+
+                    <h2>
+                        💳 Phương thức thanh toán
+                    </h2>
+
+
+                    <div class="payment-methods">
+
+
+                        <!-- QR -->
+
+                        <label class="payment-method active">
+
+                            <input
+                                type="radio"
+                                name="paymentMethod"
+                                value="qr"
+                                checked>
+
+                            <div class="method-icon">
+                                📱
+                            </div>
+
+                            <div class="method-content">
+
+                                <strong>
+                                    QR Code
+                                </strong>
+
+                                <span>
+                                    Quét mã QR để thanh toán
+                                </span>
+
+                            </div>
+
+                            <div class="method-check">
+                                ✓
+                            </div>
+
+                        </label>
+
+
+
+                        <!-- MOMO -->
+
+                        <label class="payment-method">
+
+                            <input
+                                type="radio"
+                                name="paymentMethod"
+                                value="momo">
+
+                            <div class="method-icon">
+                                🟣
+                            </div>
+
+                            <div class="method-content">
+
+                                <strong>
+                                    MoMo
+                                </strong>
+
+                                <span>
+                                    Thanh toán qua ví MoMo
+                                </span>
+
+                            </div>
+
+                            <div class="method-check">
+                                ✓
+                            </div>
+
+                        </label>
+
+
+
+                        <!-- VNPAY -->
+
+                        <label class="payment-method">
+
+                            <input
+                                type="radio"
+                                name="paymentMethod"
+                                value="vnpay">
+
+                            <div class="method-icon">
+                                🔵
+                            </div>
+
+                            <div class="method-content">
+
+                                <strong>
+                                    VNPay
+                                </strong>
+
+                                <span>
+                                    Thanh toán qua cổng VNPay
+                                </span>
+
+                            </div>
+
+                            <div class="method-check">
+                                ✓
+                            </div>
+
+                        </label>
+
+
+
+                        <!-- BANK -->
+
+                        <label class="payment-method">
+
+                            <input
+                                type="radio"
+                                name="paymentMethod"
+                                value="bank">
+
+                            <div class="method-icon">
+                                💳
+                            </div>
+
+                            <div class="method-content">
+
+                                <strong>
+                                    Thẻ ngân hàng
+                                </strong>
+
+                                <span>
+                                    Visa / Mastercard / ATM
+                                </span>
+
+                            </div>
+
+                            <div class="method-check">
+                                ✓
+                            </div>
+
+                        </label>
+
+
+
+                        <!-- CASH -->
+
+                        <label class="payment-method">
+
+                            <input
+                                type="radio"
+                                name="paymentMethod"
+                                value="cash">
+
+                            <div class="method-icon">
+                                💵
+                            </div>
+
+                            <div class="method-content">
+
+                                <strong>
+                                    Tiền mặt
+                                </strong>
+
+                                <span>
+                                    Thanh toán trực tiếp tại quầy
+                                </span>
+
+                            </div>
+
+                            <div class="method-check">
+                                ✓
+                            </div>
+
+                        </label>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- KHU VUC THANH TOAN -->
+
+                <div
+                    class="payment-card payment-detail-card"
+                    id="paymentDetailCard">
+
+                    <!-- Noi dung duoc JS thay doi -->
+
+                </div>
+
+
+            </section>
+
+
+
+            <!-- ==========================
+                 RIGHT
+            =========================== -->
+
+            <aside class="payment-right">
+
+
+                <div class="order-summary">
+
+                    <h2>
+                        Chi tiết thanh toán
+                    </h2>
+
+
+                    <div class="summary-row">
+
+                        <span>
+                            Tiền vé
+                        </span>
+
+                        <strong id="ticketTotal">
+                            0 ₫
+                        </strong>
+
+                    </div>
+
+
+                    <div class="summary-row">
+
+                        <span>
+                            Đồ ăn & thức uống
+                        </span>
+
+                        <strong id="foodTotal">
+                            0 ₫
+                        </strong>
+
+                    </div>
+
+
+                    <div class="summary-divider"></div>
+
+
+                    <div class="summary-total">
+
+                        <span>
+                            Tổng thanh toán
+                        </span>
+
+                        <strong id="grandTotal">
+                            0 ₫
+                        </strong>
+
+                    </div>
+
+
+                    <div class="secure-payment">
+
+                        <span>
+                            🔒
+                        </span>
+
+                        <p>
+                            Giao dịch của bạn được bảo mật
+                            và an toàn.
+                        </p>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        id="backButton"
+                        class="back-button">
+
+                        ← Quay lại
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        id="payButton"
+                        class="pay-button">
+
+                        Thanh toán ngay
+
+                    </button>
+
+                </div>
+
+            </aside>
+
+        </div>
+
+    </main>
+
+
+
+    <!-- ==============================
+         FOOTER
+    =============================== -->
+
+    <footer class="main-footer">
+
+    <div class="container">
+
+        <div class="footer-bottom">
+
+            <span>
+                © 2026 Cinema Booking.
+                All rights reserved.
+            </span>
+
+            <span>
+                Hệ thống đặt vé xem phim trực tuyến
+            </span>
+
+        </div>
+
+    </div>
+
+</footer>
+
+
+
+    <!-- JS -->
+
+    <script src="../../../JS/payment.js"></script>
+
+    <script src="../../../JS/site.js"></script>
+
+</body>
+
+</html>

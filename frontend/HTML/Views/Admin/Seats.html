@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Quản lý ghế - Cinema Booking</title>
+
+
+    <!-- Bootstrap -->
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+
+    <!-- Bootstrap Icons -->
+
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    >
+
+
+    <!-- Site CSS -->
+
+    <link
+        rel="stylesheet"
+        href="../../../CSS/site.css"
+    >
+
+
+    <!-- Admin CSS -->
+
+    <link
+        rel="stylesheet"
+        href="../../../CSS/admin.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <header class="admin-header">
+
+        <div class="admin-header-left">
+
+            <button
+                type="button"
+                class="admin-mobile-btn"
+                id="adminMobileBtn"
+            >
+
+                <i class="bi bi-list"></i>
+
+            </button>
+
+
+            <a
+                href="Dashboard.html"
+                class="admin-logo"
+            >
+
+                <i class="bi bi-camera-reels-fill"></i>
+
+                <span>
+                    CINEMA BOOKING
+                </span>
+
+            </a>
+
+        </div>
+
+
+        <div class="admin-header-right">
+
+            <div class="admin-user">
+
+                <div class="admin-user-icon">
+
+                    <i class="bi bi-person-fill"></i>
+
+                </div>
+
+
+                <div class="admin-user-info">
+
+                    <strong id="adminUserName">
+                        Administrator
+                    </strong>
+
+                    <small>
+                        Quản trị viên
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         WRAPPER
+    ====================================================== -->
+
+    <div class="admin-wrapper">
+
+
+        <!-- =================================================
+             SIDEBAR
+        ================================================== -->
+
+        <aside
+            class="admin-sidebar"
+            id="adminSidebar"
+        >
+
+            <div class="admin-sidebar-title">
+
+                <span>
+                    QUẢN TRỊ HỆ THỐNG
+                </span>
+
+            </div>
+
+
+            <nav class="admin-menu">
+
+
+                <a
+                    href="Dashboard.html"
+                    class="admin-menu-item"
+                >
+
+                    <i class="bi bi-grid-1x2-fill"></i>
+
+                    <span>
+                        Tổng quan
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="Movies.html"
+                    class="admin-menu-item"
+                >
+
+                    <i class="bi bi-film"></i>
+
+                    <span>
+                        Quản lý phim
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="Cinemas.html"
+                    class="admin-menu-item"
+                >
+
+                    <i class="bi bi-building"></i>
+
+                    <span>
+                        Quản lý rạp
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="Seats.html"
+                    class="admin-menu-item active"
+                >
+
+                    <i class="bi bi-grid-3x3-gap-fill"></i>
+
+                    <span>
+                        Quản lý ghế
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="Showtimes.html"
+                    class="admin-menu-item"
+                >
+
+                    <i class="bi bi-calendar3"></i>
+
+                    <span>
+                        Quản lý suất chiếu
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="Bookings.html"
+                    class="admin-menu-item"
+                >
+
+                    <i class="bi bi-ticket-perforated-fill"></i>
+
+                    <span>
+                        Quản lý đặt vé
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="Foods.html"
+                    class="admin-menu-item"
+                >
+
+                    <i class="bi bi-cup-straw"></i>
+
+                    <span>
+                        Đồ ăn & thức uống
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="Users.html"
+                    class="admin-menu-item"
+                >
+
+                    <i class="bi bi-people-fill"></i>
+
+                    <span>
+                        Quản lý nhân viên
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="Statistics.html"
+                    class="admin-menu-item"
+                >
+
+                    <i class="bi bi-bar-chart-fill"></i>
+
+                    <span>
+                        Thống kê
+                    </span>
+
+                </a>
+
+            </nav>
+
+
+            <div class="admin-sidebar-bottom">
+
+                <a
+                    href="../../../index.html"
+                    class="admin-menu-item"
+                >
+
+                    <i class="bi bi-house-door-fill"></i>
+
+                    <span>
+                        Về trang khách hàng
+                    </span>
+
+                </a>
+
+
+                <button
+                    type="button"
+                    class="admin-menu-item admin-sidebar-logout"
+                    id="adminSidebarLogout"
+                >
+
+                    <i class="bi bi-box-arrow-left"></i>
+
+                    <span>
+                        Đăng xuất
+                    </span>
+
+                </button>
+
+            </div>
+
+        </aside>
+
+
+        <!-- OVERLAY -->
+
+        <div
+            class="admin-sidebar-overlay"
+            id="adminSidebarOverlay"
+        ></div>
+
+
+
+        <!-- =================================================
+             MAIN
+        ================================================== -->
+
+        <main class="admin-main">
+
+
+            <!-- PAGE HEADER -->
+
+            <div class="admin-page-header">
+
+                <div>
+
+                    <div class="admin-breadcrumb">
+
+                        <span>
+                            Admin
+                        </span>
+
+                        <i class="bi bi-chevron-right"></i>
+
+                        <span>
+                            Quản lý ghế
+                        </span>
+
+                    </div>
+
+
+                    <h1>
+                        Quản lý ghế
+                    </h1>
+
+
+                    <p>
+                        Quản lý sơ đồ và loại ghế của từng phòng chiếu
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ALERT -->
+
+            <div
+                id="seatsAlert"
+                class="admin-alert"
+                style="display:none;"
+            ></div>
+
+
+
+            <!-- =================================================
+                 FILTER
+            ================================================== -->
+
+            <section class="seat-admin-filter">
+
+                <div class="seat-filter-item">
+
+                    <label for="cinemaSelect">
+
+                        Rạp
+
+                    </label>
+
+                    <select
+                        id="cinemaSelect"
+                        class="form-select"
+                    >
+
+                        <option value="">
+                            -- Chọn rạp --
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="seat-filter-item">
+
+                    <label for="roomSelect">
+
+                        Phòng
+
+                    </label>
+
+                    <select
+                        id="roomSelect"
+                        class="form-select"
+                        disabled
+                    >
+
+                        <option value="">
+                            -- Chọn phòng --
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 ROOM INFORMATION
+            ================================================== -->
+
+            <section
+                id="roomInfoCard"
+                class="seat-room-info"
+                style="display:none;"
+            >
+
+                <div class="seat-room-info-left">
+
+                    <div class="seat-room-icon">
+
+                        <i class="bi bi-door-open-fill"></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <h3 id="selectedRoomName">
+                            Phòng
+                        </h3>
+
+                        <p id="selectedRoomInfo">
+                            0 ghế
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="seat-room-summary">
+
+                    <div class="seat-summary-item">
+
+                        <span class="seat-summary-dot standard"></span>
+
+                        <span>
+                            Thường
+                        </span>
+
+                        <strong id="standardCount">
+                            0
+                        </strong>
+
+                    </div>
+
+
+                    <div class="seat-summary-item">
+
+                        <span class="seat-summary-dot vip"></span>
+
+                        <span>
+                            VIP
+                        </span>
+
+                        <strong id="vipCount">
+                            0
+                        </strong>
+
+                    </div>
+
+
+                    <div class="seat-summary-item">
+
+                        <span class="seat-summary-dot couple"></span>
+
+                        <span>
+                            Couple
+                        </span>
+
+                        <strong id="coupleCount">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 SEAT MAP
+            ================================================== -->
+
+            <section
+                id="seatMapCard"
+                class="seat-map-card"
+            >
+
+                <div
+                    id="seatEmpty"
+                    class="seat-empty"
+                >
+
+                    <i class="bi bi-grid-3x3-gap"></i>
+
+                    <h3>
+                        Chưa chọn phòng
+                    </h3>
+
+                    <p>
+                        Vui lòng chọn rạp và phòng để xem sơ đồ ghế.
+                    </p>
+
+                </div>
+
+
+                <div
+                    id="seatLoading"
+                    class="seat-loading"
+                    style="display:none;"
+                >
+
+
+                <div
+                    id="seatMapContent"
+                    style="display:none;"
+                >
+
+                    <!-- GHẾ -->
+
+                    <div
+                        id="seatGrid"
+                        class="seat-grid"
+                    ></div>
+
+
+                    <!-- CHÚ THÍCH -->
+
+                    <div class="seat-legend">
+
+                        <div class="seat-legend-item">
+
+                            <span class="seat-legend-box standard"></span>
+
+                            <span>
+                                Ghế thường
+                            </span>
+
+                        </div>
+
+
+                        <div class="seat-legend-item">
+
+                            <span class="seat-legend-box vip"></span>
+
+                            <span>
+                                Ghế VIP
+                            </span>
+
+                        </div>
+
+
+                        <div class="seat-legend-item">
+
+                            <span class="seat-legend-box couple"></span>
+
+                            <span>
+                                Ghế Couple
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         MODAL CHỈNH SỬA GHẾ
+    ====================================================== -->
+
+    <div
+        class="admin-modal"
+        id="seatModal"
+        style="display:none;"
+    >
+
+        <div class="admin-modal-content seat-modal-content">
+
+
+            <div class="admin-modal-header">
+
+                <div>
+
+                    <h3>
+                        Chỉnh sửa ghế
+                    </h3>
+
+                    <p>
+                        Cập nhật loại và giá ghế
+                    </p>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="admin-modal-close"
+                    id="closeSeatModal"
+                >
+
+                    <i class="bi bi-x-lg"></i>
+
+                </button>
+
+            </div>
+
+
+            <form id="seatForm">
+
+                <input
+                    type="hidden"
+                    id="seatId"
+                >
+
+
+                <div class="seat-modal-seat-name">
+
+                    <i class="bi bi-grid-3x3-gap-fill"></i>
+
+                    <span>
+                        Ghế <strong id="seatName"></strong>
+                    </span>
+
+                </div>
+
+
+                <div class="admin-form-group">
+
+                    <label for="seatType">
+
+                        Loại ghế
+
+                        <span>*</span>
+
+                    </label>
+
+
+                    <select
+                        id="seatType"
+                        class="form-control"
+                        required
+                    >
+
+                        <option value="0">
+                            Ghế thường
+                        </option>
+
+                        <option value="1">
+                            Ghế VIP
+                        </option>
+
+                        <option value="2">
+                            Ghế Couple
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="admin-form-group">
+
+                    <label for="seatPrice">
+
+                        Giá ghế
+
+                        <span>*</span>
+
+                    </label>
+
+
+                    <input
+                        type="number"
+                        id="seatPrice"
+                        class="form-control"
+                        min="0"
+                        step="1000"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="admin-modal-footer">
+
+                    <button
+                        type="button"
+                        class="admin-btn-cancel"
+                        id="cancelSeatBtn"
+                    >
+
+                        Hủy
+
+                    </button>
+
+
+                    <button
+                        type="submit"
+                        class="admin-btn-save"
+                        id="saveSeatBtn"
+                    >
+
+                        <i class="bi bi-check-lg"></i>
+
+                        Lưu
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         SCRIPT
+    ====================================================== -->
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    ></script>
+
+
+    <script src="../../../JS/site.js"></script>
+
+    <script src="../../../JS/seats.js"></script>
+
+
+</body>
+
+</html>
