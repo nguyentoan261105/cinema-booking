@@ -651,72 +651,18 @@ function renderAdminDashboard(
        SUPPORT DIFFERENT JSON CASE
     ===================================================== */
 
-    const totalRevenue =
-        data.totalRevenue ??
-        data.TotalRevenue ??
-        0;
+    const totalRevenue = data.totalRevenue ?? data.TotalRevenue ?? 0;
+    const ticketsSold = data.ticketsSold ?? data.TicketsSold ?? 0;
 
+    const movieCount = data.totalMovies ?? data.TotalMovies ?? 0;
+    const activeMovieCount = data.activeMovies ?? data.ActiveMovies ?? 0;
 
-    const ticketsSold =
-        data.ticketsSold ??
-        data.TicketsSold ??
-        0;
+    const cinemaCount = data.totalCinemas ?? data.TotalCinemas ?? 0;
+    const roomCount = data.totalRooms ?? data.TotalRooms ?? 0;
+    const showtimeCount = data.totalShowtimes ?? data.TotalShowtimes ?? 0;
 
-
-    const movieCount =
-        data.movies ??
-        data.Movies ??
-        data.movieCount ??
-        data.MovieCount ??
-        0;
-
-
-    const activeMovieCount =
-        data.activeMovies ??
-        data.ActiveMovies ??
-        data.activeMovieCount ??
-        data.ActiveMovieCount ??
-        0;
-
-
-    const cinemaCount =
-        data.cinemas ??
-        data.Cinemas ??
-        data.cinemaCount ??
-        data.CinemaCount ??
-        0;
-
-
-    const roomCount =
-        data.rooms ??
-        data.Rooms ??
-        data.roomCount ??
-        data.RoomCount ??
-        0;
-
-
-    const showtimeCount =
-        data.showtimes ??
-        data.Showtimes ??
-        data.showtimeCount ??
-        data.ShowtimeCount ??
-        0;
-
-
-    const userCount =
-        data.users ??
-        data.Users ??
-        data.userCount ??
-        data.UserCount ??
-        0;
-
-
-    const staffCount =
-        data.staff ??
-        data.Staff ??
-        data.staffCount ??
-        data.StaffCount ??
-        0;
+    const userCount = data.totalUsers ?? data.TotalUsers ?? 0;
+    const staffCount = data.totalStaff ?? data.TotalStaff ?? 0;
 
 
     const selectedYear =
@@ -940,29 +886,7 @@ function renderAdminDashboard(
    LOGOUT
 ========================================================= */
 
-function adminLogout() {
 
-    localStorage.removeItem(
-        "accessToken"
-    );
-
-    localStorage.removeItem(
-        "currentUser"
-    );
-
-    localStorage.removeItem(
-        "isLoggedIn"
-    );
-
-    localStorage.removeItem(
-        "userRole"
-    );
-
-
-    window.location.href =
-        "../Account/Login.html";
-
-}
 
 
 /* =========================================================
@@ -1179,3 +1103,18 @@ document.addEventListener(
 
     }
 );
+const logoutButton = document.getElementById("adminSidebarLogout");
+
+if (logoutButton) {
+    logoutButton.addEventListener("click", function () {
+        const confirmLogout = confirm("Bạn có chắc muốn đăng xuất?");
+
+        if (confirmLogout) {
+            localStorage.removeItem("token");
+            localStorage.removeItem("user");
+            sessionStorage.clear();
+
+            window.location.href = "../Account/Login.html";
+        }
+    });
+}

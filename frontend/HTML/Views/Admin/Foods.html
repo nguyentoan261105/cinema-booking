@@ -1,0 +1,548 @@
+```html
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Quản lý đồ ăn & thức uống - Cinema Booking</title>
+
+    <!-- BOOTSTRAP ICONS -->
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- CSS CHUNG -->
+    <link rel="stylesheet" href="../../../CSS/site.css">
+    
+    <link rel="stylesheet" href="../../../CSS/admin.css">
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="admin-header">
+
+        <div class="admin-header-left">
+            <div class="admin-logo">
+                <i class="bi bi-camera-reels-fill"></i>
+                <span>CINEMA BOOKING</span>
+            </div>
+        </div>
+
+        <div class="admin-header-right">
+            <div class="admin-user">
+
+                <div class="admin-user-icon">
+                    <i class="bi bi-person-fill"></i>
+                </div>
+
+                <div class="admin-user-info">
+                    <strong id="adminUserName">Administrator</strong>
+                    <small>Quản trị viên</small>
+                </div>
+
+            </div>
+        </div>
+
+    </header>
+
+    <!-- WRAPPER -->
+    <div class="admin-wrapper">
+
+        <!-- SIDEBAR -->
+        <aside class="admin-sidebar">
+
+            <div class="admin-sidebar-title">
+                QUẢN TRỊ HỆ THỐNG
+            </div>
+
+            <nav class="admin-menu">
+
+                <a href="Dashboard.html" class="admin-menu-item">
+                    <i class="bi bi-grid-1x2-fill"></i>
+                    <span>Tổng quan</span>
+                </a>
+
+                <a href="Movies.html" class="admin-menu-item">
+                    <i class="bi bi-film"></i>
+
+                    <span>Quản lý phim</span>
+                </a>
+
+                <a href="Cinemas.html" class="admin-menu-item">
+                    <i class="bi bi-building"></i>
+                    <span>Quản lý rạp</span>
+                </a>
+
+                <a href="Seats.html" class="admin-menu-item">
+                    <i class="bi bi-grid-3x3-gap-fill"></i>
+                    <span>Quản lý ghế</span>
+                </a>
+
+                <a href="Showtimes.html" class="admin-menu-item">
+                    <i class="bi bi-calendar3"></i>
+                    <span>Quản lý suất chiếu</span>
+                </a>
+
+                <a href="Bookings.html" class="admin-menu-item">
+                    <i class="bi bi-ticket-perforated-fill"></i>
+                    <span>Quản lý đặt vé</span>
+                </a>
+
+                <a href="Foods.html" class="admin-menu-item active">
+                    <i class="bi bi-cup-straw"></i>
+                    <span>Đồ ăn & thức uống</span>
+                </a>
+
+                <a href="Users.html" class="admin-menu-item">
+                    <i class="bi bi-people-fill"></i>
+                    <span>Quản lý nhân viên</span>
+                </a>
+
+                <a href="Statistics.html" class="admin-menu-item">
+                    <i class="bi bi-bar-chart-fill"></i>
+                    <span>Thống kê</span>
+                </a>
+
+            </nav>
+
+            <!-- SIDEBAR BOTTOM -->
+            <div class="admin-sidebar-bottom">
+
+                <!-- ĐĂNG XUẤT -->
+
+                <button
+                    type="button"
+                    id="adminSidebarLogout"
+                    class="admin-menu-item admin-sidebar-logout">
+
+                    <i class="bi bi-box-arrow-left"></i>
+
+                        <span>
+                            Đăng xuất
+                        </span>
+
+                </button>
+
+            </div>
+
+        </aside>
+
+        <!-- MAIN -->
+        <main class="admin-main">
+
+            <!-- PAGE HEADER -->
+            <div class="admin-page-header">
+
+                <div>
+
+                    <div class="admin-breadcrumb">
+
+                    <span>
+                        Admin
+                    </span>
+
+                        <i class="bi bi-chevron-right"></i>
+
+                    <span>
+                        Quản lý đồ ăn & thức uống
+                    </span>
+
+                </div>
+
+                    <h1 class="admin-page-title">
+                        Quản lý đồ ăn & thức uống
+                    </h1>
+
+                    <p>
+                        Quản lý sản phẩm, danh mục và giá bán tại rạp
+                    </p>
+                </div>
+
+                <button
+                    type="button"
+                    id="addFoodBtn"
+                    class="admin-action-btn">
+
+                    <i class="bi bi-plus-lg"></i>
+                    Thêm sản phẩm
+
+                </button>
+
+            </div>
+
+            <!-- ALERT -->
+            <div
+                id="foodsAlert"
+                class="admin-alert"
+                style="display: none;">
+            </div>
+
+            <!-- STATISTICS -->
+            <div class="row g-3 mb-4">
+
+                <div class="col-12 col-sm-6 col-xl-3">
+                    <div class="admin-table-card p-3 h-100">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <p class="text-muted mb-1">Tổng sản phẩm</p>
+                                <h3 class="mb-0" id="totalFoods">0</h3>
+                            </div>
+                            <i class="bi bi-cup-straw fs-2"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-sm-6 col-xl-3">
+                    <div class="admin-table-card p-3 h-100">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <p class="text-muted mb-1">Đang kinh doanh</p>
+                                <h3 class="mb-0" id="activeFoods">0</h3>
+                            </div>
+                            <i class="bi bi-check-circle fs-2"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-sm-6 col-xl-3">
+                    <div class="admin-table-card p-3 h-100">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <p class="text-muted mb-1">Danh mục</p>
+                                <h3 class="mb-0" id="totalFoodCategories">0</h3>
+                            </div>
+                            <i class="bi bi-tags fs-2"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-sm-6 col-xl-3">
+                    <div class="admin-table-card p-3 h-100">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <p class="text-muted mb-1">Giá trung bình</p>
+                                <h3 class="mb-0" id="averageFoodPrice">0 đ</h3>
+                            </div>
+                            <i class="bi bi-currency-dollar fs-2"></i>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- SEARCH AND FILTER -->
+            <div class="admin-filter-box">
+
+                <div class="admin-search-box">
+                    <i class="bi bi-search"></i>
+
+                    <input
+                        type="text"
+                        id="foodSearch"
+                        placeholder="Tìm tên sản phẩm...">
+                </div>
+
+                <select id="foodCategoryFilter" aria-label="Lọc theo danh mục">
+                    <option value="">Tất cả danh mục</option>
+                </select>
+
+                <select id="foodStatusFilter" aria-label="Lọc theo trạng thái">
+                    <option value="">Tất cả trạng thái</option>
+                    <option value="true">Đang kinh doanh</option>
+                    <option value="false">Ngừng kinh doanh</option>
+                </select>
+
+                <button
+                    type="button"
+                    id="filterFoodsBtn"
+                    class="admin-action-btn">
+
+                    <i class="bi bi-funnel"></i>
+                    Lọc
+
+                </button>
+
+
+            </div>
+
+            <!-- TABLE -->
+            <div class="admin-table-card">
+
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 p-3">
+
+                    <div>
+                        <strong>Danh sách sản phẩm</strong>
+                        <p class="text-muted mb-0" id="foodsResultText">
+                            Đang tải dữ liệu...
+                        </p>
+                    </div>
+
+                </div>
+
+                <div style="overflow-x: auto;">
+
+                    <table class="admin-table">
+
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Sản phẩm</th>
+                                <th>Danh mục</th>
+                                <th>Đơn giá</th>
+                                <th>Trạng thái</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="foodsTable">
+
+                            <tr>
+                                <td colspan="6" style="text-align: center;">
+                                    Đang tải dữ liệu...
+                                </td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </main>
+
+    </div>
+
+    <!-- MODAL THÊM / SỬA SẢN PHẨM -->
+    <div
+        id="foodModal"
+        class="admin-modal"
+        style="display: none;">
+
+        <div class="admin-modal-content">
+
+            <!-- HEADER -->
+            <div class="admin-modal-header">
+
+                <h2 id="foodModalTitle">Thêm sản phẩm</h2>
+
+                <button
+                    type="button"
+                    id="closeFoodModal"
+                    class="admin-modal-close"
+                    aria-label="Đóng">
+
+                    <i class="bi bi-x-lg"></i>
+
+                </button>
+
+            </div>
+
+            <!-- FORM -->
+            <form id="foodForm">
+
+                <input type="hidden" id="foodId">
+
+                <div class="movie-form-row">
+
+                    <div class="movie-form-group">
+                        <label for="foodName">Tên sản phẩm *</label>
+
+                        <input
+                            type="text"
+                            id="foodName"
+                            placeholder="Ví dụ: Bắp rang bơ"
+                            required>
+                    </div>
+
+                    <div class="movie-form-group">
+                        <label for="foodCategory">Danh mục *</label>
+
+                        <select id="foodCategory" required>
+                            <option value="">Chọn danh mục</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <div class="movie-form-row">
+
+                    <div class="movie-form-group">
+                        <label for="foodPrice">Đơn giá (VNĐ) *</label>
+
+                        <input
+                            type="number"
+                            id="foodPrice"
+                            min="0"
+                            step="1000"
+                            placeholder="Ví dụ: 45000"
+                            required>
+                    </div>
+
+                   
+                    <div class="movie-form-group">
+                        <label for="foodQuantity">Số lượng tồn kho *</label>
+                        <input
+                            type="number"
+                            id="foodQuantity"
+                            min="0"
+                            step="1"
+                            value="0"
+                            required>
+                    </div>
+
+
+                    <div class="movie-form-group">
+                        <label for="foodImage">Đường dẫn hình ảnh</label>
+
+                        <input
+                            type="text"
+                            id="foodImage"
+                            placeholder="/images/foods/popcorn.jpg">
+                    </div>
+
+                </div>
+
+                <div class="movie-form-group">
+                    <label for="foodDescription">Mô tả sản phẩm</label>
+
+                    <textarea
+                        id="foodDescription"
+                        placeholder="Nhập mô tả sản phẩm..."></textarea>
+                </div>
+
+                <div class="movie-active food-business-status">
+                    <label for="foodStatus">Trạng thái kinh doanh</label>
+
+                    <label class="food-switch">
+                        <input type="checkbox" id="foodStatus" checked>
+                        <span class="food-slider"></span>
+                    </label>
+
+                    <span id="foodStatusText" class="food-status-text">
+                        Đang kinh doanh
+                    </span>
+                </div>
+
+                <div class="movie-form-group">
+                    <label for="foodImagePreview">Xem trước hình ảnh</label>
+
+                    <div id="foodImagePreview">
+                        <img
+                            id="foodPreviewImage"
+                            src=""
+                            alt="Ảnh xem trước sản phẩm"
+                            style="display: none;">
+                    </div>
+                </div>
+
+
+            </form>
+
+            <!-- FOOTER -->
+            <div class="admin-modal-footer">
+
+                <button
+                    type="button"
+                    id="cancelFoodBtn"
+                    class="admin-modal-cancel">
+
+                    Hủy
+
+                </button>
+
+                <button
+                    type="submit"
+                    form="foodForm"
+                    id="saveFoodBtn"
+                    class="admin-modal-save">
+
+                    Lưu sản phẩm
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- MODAL THÊM / SỬA DANH MỤC -->
+    <div
+        id="foodCategoryModal"
+        class="admin-modal"
+        style="display: none;">
+
+        <div class="admin-modal-content">
+
+            <div class="admin-modal-header">
+
+                <h2 id="foodCategoryModalTitle">Thêm danh mục</h2>
+
+                <button
+                    type="button"
+                    id="closeFoodCategoryModal"
+                    class="admin-modal-close"
+                    aria-label="Đóng">
+
+                    <i class="bi bi-x-lg"></i>
+
+                </button>
+
+            </div>
+
+            <form id="foodCategoryForm">
+
+                <input type="hidden" id="foodCategoryId">
+
+                <div class="movie-form-group">
+                    <label for="foodCategoryName">Tên danh mục *</label>
+
+                    <input
+                        type="text"
+                        id="foodCategoryName"
+                        placeholder="Ví dụ: Đồ ăn, Nước uống, Combo"
+                        required>
+                </div>
+
+            </form>
+
+            <div class="admin-modal-footer">
+
+                <button
+                    type="button"
+                    id="cancelFoodCategoryBtn"
+                    class="admin-modal-cancel">
+
+                    Hủy
+
+                </button>
+
+                <button
+                    type="submit"
+                    form="foodCategoryForm"
+                    id="saveFoodCategoryBtn"
+                    class="admin-modal-save">
+
+                    Lưu danh mục
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- JAVASCRIPT -->
+    <script src="../../../JS/site.js"></script>
+    
+    <script src="../../../JS/food.js"></script>
+
+</body>
+
+</html>

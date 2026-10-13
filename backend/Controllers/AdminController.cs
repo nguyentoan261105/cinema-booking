@@ -19,6 +19,7 @@ public class AdminController : ControllerBase
         _db = db;
     }
 
+
     // =========================================================
     // DASHBOARD
     // GET: /api/admin/dashboard
@@ -28,29 +29,51 @@ public class AdminController : ControllerBase
     [HttpGet("dashboard")]
     public async Task<IActionResult> Dashboard(
         [FromQuery] int? year,
-        [FromQuery] int? month)
+        [FromQuery] int? month,
+        [FromQuery] DateTime? date)
     {
-        int selectedYear = year ?? DateTime.Now.Year;
-        int selectedMonth = month ?? DateTime.Now.Month;
+        DateTime fromDate;
+        DateTime toDate;
+        int selectedYear;
+        int selectedMonth;
 
-        if (selectedMonth < 1 || selectedMonth > 12)
+        if (date.HasValue)
         {
-            return BadRequest(new
+            fromDate = date.Value.Date;
+            toDate = fromDate.AddDays(1);
+            selectedYear = fromDate.Year;
+            selectedMonth = fromDate.Month;
+        }
+        else
+        {
+            selectedYear = year ?? DateTime.Now.Year;
+            selectedMonth = month ?? DateTime.Now.Month;
+
+            if (selectedYear < 2000 || selectedYear > 2100 ||
+                selectedMonth < 0 || selectedMonth > 12)
             {
-                message = "Thang khong hop le."
-            });
+                return BadRequest(new
+                {
+                    message = "Nam hoac thang khong hop le."
+                });
+            }
+
+            if (selectedMonth == 0)
+            {
+                fromDate = new DateTime(selectedYear, 1, 1);
+                toDate = fromDate.AddYears(1);
+            }
+            else
+            {
+                fromDate = new DateTime(
+                    selectedYear, selectedMonth, 1);
+
+                toDate = fromDate.AddMonths(1);
+            }
         }
 
-        DateTime fromDate = new DateTime(
-            selectedYear,
-            selectedMonth,
-            1
-        );
-
-        DateTime toDate = fromDate.AddMonths(1);
-
-        // Booking da thanh toan hoac da su dung
         var soldBookings = _db.Bookings
+            .AsNoTracking()
             .Where(x =>
                 (x.Status == 1 || x.Status == 3) &&
                 x.CreatedAt >= fromDate &&
@@ -64,7 +87,7 @@ public class AdminController : ControllerBase
         // Tong doanh thu
         decimal totalRevenue = await soldBookings
             .Select(x => (decimal?)x.TotalAmount)
-            .SumAsync() ?? 0;
+            .SumAsync() ?? 0m;
 
         int totalMovies = await _db.Movies.CountAsync();
 
@@ -85,10 +108,12 @@ public class AdminController : ControllerBase
         int totalStaff = await _db.Users
             .CountAsync(x => x.Role == "Staff");
 
+
         return Ok(new
         {
             year = selectedYear,
             month = selectedMonth,
+            date = date?.ToString("yyyy-MM-dd"),
 
             ticketsSold,
             totalRevenue,
@@ -104,6 +129,203 @@ public class AdminController : ControllerBase
             totalStaff
         });
     }
+
+    
+    // =========================================================
+    // STATISTICS CHARTS
+    // GET: /api/admin/statistics/charts?year=2026&month=10
+    // =========================================================  
+    
+    [HttpGet("statistics/charts")]
+    public async Task<IActionResult> GetStatisticsCharts(
+        [FromQuery] int? year,
+        [FromQuery] int? month,
+        [FromQuery] DateTime? date)
+    {
+        int selectedYear = year ?? DateTime.Now.Year;
+        int selectedMonth = month ?? DateTime.Now.Month;
+
+        DateTime fromDate;
+        DateTime toDate;
+
+        if (date.HasValue)
+        {
+            fromDate = date.Value.Date;
+            toDate = fromDate.AddDays(1);
+            selectedYear = fromDate.Year;
+            selectedMonth = fromDate.Month;
+        }
+        else
+        {
+            if (selectedYear < 2000 || selectedYear > 2100 ||
+                selectedMonth < 0 || selectedMonth > 12)
+            {
+                return BadRequest(new
+                {
+                    message = "Nam hoac thang khong hop le."
+                });
+            }
+
+            if (selectedMonth == 0)
+            {
+                fromDate = new DateTime(selectedYear, 1, 1);
+                toDate = fromDate.AddYears(1);
+            }
+            else
+            {
+                fromDate = new DateTime(
+                    selectedYear, selectedMonth, 1);
+                toDate = fromDate.AddMonths(1);
+            }
+        }
+
+        var soldBookings = _db.Bookings
+            .AsNoTracking()
+            .Where(x =>
+                (x.Status == 1 || x.Status == 3) &&
+                x.CreatedAt >= fromDate &&
+                x.CreatedAt < toDate);
+
+        // Doanh thu theo ngay
+        var revenueByDay = await soldBookings
+            .GroupBy(x => x.CreatedAt.Date)
+            .Select(g => new
+            {
+                Date = g.Key,
+                Revenue = g.Sum(x => x.TotalAmount)
+            })
+            .ToListAsync();
+
+        // So ve ban theo ngay
+        var ticketsByDay = await soldBookings
+            .SelectMany(x => x.BookingDetails)
+            .GroupBy(x => x.Booking.CreatedAt.Date)
+            .Select(g => new
+            {
+                Date = g.Key,
+                Tickets = g.Count()
+            })
+            .ToListAsync();
+
+        // So booking theo trang thai
+        var bookingStatuses = await _db.Bookings
+            .AsNoTracking()
+            .Where(x =>
+                x.CreatedAt >= fromDate &&
+                x.CreatedAt < toDate)
+            .GroupBy(x => x.Status)
+            .Select(g => new
+            {
+                Status = g.Key,
+                Count = g.Count()
+            })
+            .ToListAsync();
+
+        // Doanh thu theo phim
+        var revenueByMovie = await soldBookings
+            .GroupBy(x => new
+            {
+                x.Showtime.MovieId,
+                MovieTitle = x.Showtime.Movie.Title
+            })
+            .Select(g => new
+            {
+                MovieId = g.Key.MovieId,
+                MovieTitle = g.Key.MovieTitle,
+                Revenue = g.Sum(x => x.TotalAmount)
+            })
+            .OrderByDescending(x => x.Revenue)
+            .ToListAsync();
+
+        // Tao cac moc thoi gian can hien thi tren bieu do
+        var periods = new List<(DateTime Start, DateTime End, string Label)>();
+
+        if (date.HasValue)
+        {
+            periods.Add((
+                fromDate,
+                toDate,
+                fromDate.ToString("dd/MM/yyyy")
+            ));
+        }
+        else if (selectedMonth == 0)
+        {
+            for (int m = 1; m <= 12; m++)
+            {
+                var start = new DateTime(selectedYear, m, 1);
+
+                periods.Add((
+                    start,
+                    start.AddMonths(1),
+                    $"Thang {m}"
+                ));
+            }
+        }
+        else
+        {
+            int days = DateTime.DaysInMonth(
+                selectedYear, selectedMonth);
+
+            for (int d = 1; d <= days; d++)
+            {
+                var start = new DateTime(
+                    selectedYear, selectedMonth, d);
+
+                periods.Add((
+                    start,
+                    start.AddDays(1),
+                    start.ToString("dd/MM")
+                ));
+            }
+        }
+
+        var dailyRevenue = periods.Select(p => new
+        {
+            date = p.Label,
+            revenue = revenueByDay
+                .Where(x => x.Date >= p.Start && x.Date < p.End)
+                .Sum(x => x.Revenue)
+        }).ToList();
+
+        var dailyTickets = periods.Select(p => new
+        {
+            date = p.Label,
+            tickets = ticketsByDay
+                .Where(x => x.Date >= p.Start && x.Date < p.End)
+                .Sum(x => x.Tickets)
+        }).ToList();
+
+        var statusNames = new Dictionary<int, string>
+        {
+            { 0, "Cho thanh toan" },
+            { 1, "Da thanh toan" },
+            { 2, "Da huy" },
+            { 3, "Da su dung" }
+        };
+
+        var statusData = Enumerable.Range(0, 4)
+            .Select(status => new
+            {
+                status,
+                label = statusNames[status],
+                count = bookingStatuses
+                    .Where(x => x.Status == status)
+                    .Sum(x => x.Count)
+            })
+            .ToList();
+
+        return Ok(new
+        {
+            year = selectedYear,
+            month = selectedMonth,
+            date = date?.ToString("yyyy-MM-dd"),
+            dailyRevenue,
+            dailyTickets,
+            bookingStatuses = statusData,
+            revenueByMovie
+        });
+    }
+
 
     // =========================================================
     // EMPLOYEE MANAGEMENT
@@ -1574,6 +1796,239 @@ public class AdminController : ControllerBase
         return Ok(new
         {
             message = "Xoa suat chieu thanh cong."
+        });
+    }
+
+    
+    // =========================================================
+    // BOOKING MANAGEMENT
+    // =========================================================
+
+    // GET: /api/admin/bookings
+    [HttpGet("bookings")]
+    public async Task<IActionResult> GetBookings()
+    {
+        var bookings = await _db.Bookings
+            .AsNoTracking()
+            .Include(x => x.User)
+            .Include(x => x.Showtime)
+                .ThenInclude(x => x.Movie)
+            .Include(x => x.Showtime)
+                .ThenInclude(x => x.Room)
+                    .ThenInclude(x => x.Cinema)
+            .Include(x => x.BookingDetails)
+                .ThenInclude(x => x.Seat)
+            .OrderByDescending(x => x.CreatedAt)
+            .Select(x => new
+            {
+                x.Id,
+                x.BookingCode,
+                x.UserId,
+                x.ShowtimeId,
+                x.TotalAmount,
+                x.Status,
+                x.CreatedAt,
+
+                user = new
+                {
+                    x.User.FullName,
+                    x.User.Email,
+                    x.User.Phone
+                },
+
+                showtime = new
+                {
+                    x.Showtime.StartTime,
+                    x.Showtime.EndTime,
+
+                    movie = new
+                    {
+                        x.Showtime.Movie.Id,
+                        x.Showtime.Movie.Title
+                    },
+
+                    room = new
+                    {
+                        x.Showtime.Room.Id,
+                        x.Showtime.Room.Name,
+
+                        cinema = new
+                        {
+                            x.Showtime.Room.Cinema.Id,
+                            x.Showtime.Room.Cinema.Name,
+                            x.Showtime.Room.Cinema.Address
+                        }
+                    }
+                },
+
+                seats = x.BookingDetails.Select(d => new
+                {
+                    d.SeatId,
+                    d.Price,
+                    name = d.Seat.RowName + d.Seat.Number,
+                    rowName = d.Seat.RowName,
+                    number = d.Seat.Number,
+                    type = d.Seat.Type
+                }).ToList()
+            })
+            .ToListAsync();
+
+        return Ok(bookings);
+    }
+
+    // GET: /api/admin/bookings/{id}
+    [HttpGet("bookings/{id:int}")]
+    public async Task<IActionResult> GetBookingDetail(int id)
+    {
+        var booking = await _db.Bookings
+            .AsNoTracking()
+            .Include(x => x.User)
+            .Include(x => x.Showtime)
+                .ThenInclude(x => x.Movie)
+            .Include(x => x.Showtime)
+                .ThenInclude(x => x.Room)
+                    .ThenInclude(x => x.Cinema)
+            .Include(x => x.BookingDetails)
+                .ThenInclude(x => x.Seat)
+            .Include(x => x.BookingFoods)
+                .ThenInclude(x => x.Food)
+            .Include(x => x.Payment)
+            .FirstOrDefaultAsync(x => x.Id == id);
+
+        if (booking == null)
+        {
+            return NotFound(new
+            {
+                message = "Khong tim thay dat ve."
+            });
+        }
+
+        return Ok(new
+        {
+            booking.Id,
+            booking.BookingCode,
+            booking.UserId,
+            booking.ShowtimeId,
+            booking.TotalAmount,
+            booking.Status,
+            booking.CreatedAt,
+
+            user = new
+            {
+                booking.User.FullName,
+                booking.User.Email,
+                booking.User.Phone
+            },
+
+            showtime = new
+            {
+                booking.Showtime.StartTime,
+                booking.Showtime.EndTime,
+
+                movie = new
+                {
+                    booking.Showtime.Movie.Id,
+                    booking.Showtime.Movie.Title
+                },
+
+                room = new
+                {
+                    booking.Showtime.Room.Id,
+                    booking.Showtime.Room.Name,
+
+                    cinema = new
+                    {
+                        booking.Showtime.Room.Cinema.Id,
+                        booking.Showtime.Room.Cinema.Name,
+                        booking.Showtime.Room.Cinema.Address
+                    }
+                }
+            },
+
+            seats = booking.BookingDetails.Select(d => new
+            {
+                d.SeatId,
+                d.Price,
+                name = d.Seat.RowName + d.Seat.Number,
+                rowName = d.Seat.RowName,
+                number = d.Seat.Number,
+                type = d.Seat.Type
+            }),
+
+            foods = booking.BookingFoods.Select(f => new
+            {
+                name = f.Food.Name,
+                quantity = f.Quantity,
+                price = f.Food.Price,
+                total = f.Food.Price * f.Quantity
+            }),
+
+            payment = booking.Payment == null ? null : new
+            {
+                booking.Payment.Method,
+                booking.Payment.Status,
+                booking.Payment.Amount,
+                booking.Payment.PaidAt
+            }
+        });
+    }
+
+    // PUT: /api/admin/bookings/{id}/cancel
+    [HttpPut("bookings/{id:int}/cancel")]
+    public async Task<IActionResult> CancelBooking(int id)
+    {
+        var booking = await _db.Bookings
+            .Include(x => x.BookingDetails)
+            .FirstOrDefaultAsync(x => x.Id == id);
+
+        if (booking == null)
+        {
+            return NotFound(new
+            {
+                message = "Khong tim thay dat ve."
+            });
+        }
+
+        // 0 = Cho thanh toan, 1 = Da thanh toan
+        if (booking.Status != 0 && booking.Status != 1)
+        {
+            return BadRequest(new
+            {
+                message = "Dat ve khong the huy o trang thai hien tai."
+            });
+        }
+
+        // Giai phong cac ghe dang duoc gan cho booking nay
+        var bookedSeats = await _db.ShowtimeSeats
+            .Where(x =>
+                x.BookingId == booking.Id &&
+                x.ShowtimeId == booking.ShowtimeId)
+            .ToListAsync();
+
+        foreach (var seat in bookedSeats)
+        {
+            seat.Status = 0;
+            seat.BookingId = null;
+            seat.HeldByUserId = null;
+            seat.HoldUntil = null;
+        }
+
+        // 2 = Da huy
+        booking.Status = 2;
+
+        if (booking.Payment != null)
+        {
+            booking.Payment.Status = "Cancelled";
+        }
+
+        await _db.SaveChangesAsync();
+
+        return Ok(new
+        {
+            message = "Huy dat ve thanh cong.",
+            bookingId = booking.Id,
+            bookingCode = booking.BookingCode,
+            status = booking.Status
         });
     }
 

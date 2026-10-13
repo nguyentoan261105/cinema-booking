@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý đặt vé - Cinema Booking</title>
+
+        <!-- Bootstrap Icons -->
+
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    >
+
+
+    <!-- Site CSS -->
+
+    <link
+        rel="stylesheet"
+        href="../../../CSS/site.css"
+    >
+
+
+    <!-- Admin CSS -->
+
+    <link
+        rel="stylesheet"
+        href="../../../CSS/admin.css"
+    >
+</head>
+<body>
+
+<header class="admin-header">
+
+        <div class="admin-header-left">
+
+            <button
+                type="button"
+                class="admin-mobile-btn"
+                id="adminMobileBtn"
+            >
+
+                <i class="bi bi-list"></i>
+
+            </button>
+
+
+            <a
+                href="Dashboard.html"
+                class="admin-logo"
+            >
+
+                <i class="bi bi-camera-reels-fill"></i>
+
+                <span>
+                    CINEMA BOOKING
+                </span>
+
+            </a>
+
+        </div>
+
+
+        <div class="admin-header-right">
+
+            <div class="admin-user">
+
+                <div class="admin-user-icon">
+
+                    <i class="bi bi-person-fill"></i>
+
+                </div>
+
+
+                <div class="admin-user-info">
+
+                    <strong id="adminUserName">
+                        Administrator
+                    </strong>
+
+                    <small>
+                        Quản trị viên
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </header>
+
+<div class="admin-wrapper">
+
+    <aside class="admin-sidebar" id="adminSidebar">
+        <div class="admin-sidebar-title">MENU QUẢN LÝ</div>
+
+        <nav class="admin-menu">
+            <a href="Dashboard.html" class="admin-menu-item">
+                <i class="bi bi-grid-1x2-fill"></i><span>Tổng quan</span>
+            </a>
+            <a href="Movies.html" class="admin-menu-item">
+                <i class="bi bi-film"></i><span>Quản lý phim</span>
+            </a>
+            <a href="Cinemas.html" class="admin-menu-item">
+                <i class="bi bi-building"></i><span>Quản lý rạp</span>
+            </a>
+            <a href="Seats.html" class="admin-menu-item">
+                <i class="bi bi-grid-3x3-gap-fill"></i><span>Quản lý ghế</span>
+            </a>
+            <a href="Showtimes.html" class="admin-menu-item">
+                <i class="bi bi-calendar3"></i><span>Quản lý suất chiếu</span>
+            </a>
+            <a href="Bookings.html" class="admin-menu-item active">
+                <i class="bi bi-ticket-perforated-fill"></i><span>Quản lý đặt vé</span>
+            </a>
+            <a href="Foods.html" class="admin-menu-item">
+                <i class="bi bi-cup-straw"></i><span>Đồ ăn &amp; thức uống</span>
+            </a>
+            <a href="Users.html" class="admin-menu-item">
+                <i class="bi bi-people-fill"></i><span>Quản lý nhân viên</span>
+            </a>
+            <a href="Statistics.html" class="admin-menu-item">
+                <i class="bi bi-bar-chart-fill"></i><span>Thống kê</span>
+            </a>
+        </nav>
+
+        <div class="admin-sidebar-bottom">
+            
+            <button
+                    type="button"
+                    class="admin-menu-item admin-sidebar-logout"
+                    id="adminSidebarLogout"
+                >
+
+                <i class="bi bi-box-arrow-left"></i>
+
+                <span>
+                    Đăng xuất
+                </span>
+
+            </button>
+        </div>
+    </aside>
+
+    <div class="admin-sidebar-overlay" id="adminSidebarOverlay"></div>
+
+    <main class="admin-main">
+
+        <div class="admin-breadcrumb">
+            <span>Admin</span>
+            <i class="bi bi-chevron-right"></i>
+            <span>Quản lý đặt vé</span>
+        </div>
+
+        <div class="admin-page-header">
+            <div>
+                <h1>Quản lý đặt vé</h1>
+                <p>Theo dõi thông tin vé, khách hàng và trạng thái thanh toán.</p>
+            </div>
+
+            <button type="button" class="admin-primary-btn" id="refreshBookingsBtn">
+                <i class="bi bi-arrow-clockwise"></i> Làm mới
+            </button>
+        </div>
+
+        <div id="bookingsAlert"></div>
+
+        <div class="admin-stats-grid booking-stats">
+            <div class="admin-stat-card">
+                <div class="admin-stat-icon"><i class="bi bi-ticket-perforated"></i></div>
+                <div class="admin-stat-info">
+                    <span>Tổng đặt vé</span>
+                    <h3 id="totalBookings">0</h3>
+                </div>
+            </div>
+            <div class="admin-stat-card">
+                <div class="admin-stat-icon"><i class="bi bi-hourglass-split"></i></div>
+                <div class="admin-stat-info">
+                    <span>Chờ thanh toán</span>
+                    <h3 id="pendingBookings">0</h3>
+                </div>
+            </div>
+            <div class="admin-stat-card">
+                <div class="admin-stat-icon"><i class="bi bi-check-circle"></i></div>
+                <div class="admin-stat-info">
+                    <span>Đã thanh toán</span>
+                    <h3 id="paidBookings">0</h3>
+                </div>
+            </div>
+            <div class="admin-stat-card">
+                <div class="admin-stat-icon"><i class="bi bi-cash-stack"></i></div>
+                <div class="admin-stat-info">
+                    <span>Doanh thu vé đã thanh toán</span>
+                    <h3 id="bookingRevenue">0 đ</h3>
+                </div>
+            </div>
+        </div>
+
+        <section class="admin-filter-card booking-filter-card">
+            <div class="admin-filter-title">
+                <i class="bi bi-funnel"></i> Bộ lọc đặt vé
+            </div>
+
+            <div class="booking-filter-grid">
+                <div class="admin-filter-item">
+                    <label for="bookingSearch">Tìm kiếm</label>
+                    <input type="text" id="bookingSearch" class="form-control"
+                           placeholder="Mã vé, tên khách hàng, email...">
+                </div>
+
+                <div class="admin-filter-item">
+                    <label for="bookingStatus">Trạng thái vé</label>
+                    <select id="bookingStatus" class="form-select">
+                        <option value="">Tất cả trạng thái</option>
+                        <option value="0">Chờ thanh toán</option>
+                        <option value="1">Đã thanh toán</option>
+                        <option value="2">Đã hủy</option>
+                        <option value="3">Đã sử dụng</option>
+                    </select>
+                </div>
+
+                <div class="admin-filter-item">
+                    <label for="bookingFromDate">Từ ngày đặt</label>
+                    <input type="date" id="bookingFromDate" class="form-control">
+                </div>
+
+                <div class="admin-filter-item">
+                    <label for="bookingToDate">Đến ngày đặt</label>
+                    <input type="date" id="bookingToDate" class="form-control">
+                </div>
+
+                <div class="booking-filter-actions">
+                    <button type="button" class="admin-primary-btn" id="filterBookingsBtn">
+                        <i class="bi bi-search"></i> Lọc
+                    </button>
+                    
+                </div>
+            </div>
+        </section>
+
+        <section class="admin-panel booking-table-panel">
+            <div class="admin-panel-header">
+                <div>
+                    <h3>Danh sách đặt vé</h3>
+                    <p id="bookingResultText">Đang tải dữ liệu...</p>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table align-middle booking-table">
+                    <thead>
+                        <tr>
+                            <th>Mã vé</th>
+                            <th>Khách hàng</th>
+                            <th>Phim</th>
+                            <th>Suất chiếu</th>
+                            <th>Ghế</th>
+                            <th>Tổng tiền</th>
+                            <th>Trạng thái</th>
+                            <th>Ngày đặt</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bookingsTable">
+                        <tr>
+                            <td colspan="9" class="text-center py-5">
+                                <div class="spinner-border text-danger"></div>
+                                <p class="mt-2 mb-0">Đang tải danh sách đặt vé...</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+</div>
+
+<!-- MODAL CHI TIET VE -->
+<div class="modal fade" id="bookingDetailModal" tabindex="-1"
+     aria-labelledby="bookingDetailTitle" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content booking-detail-modal">
+            <div class="modal-header">
+                <div>
+                    <h5 class="modal-title" id="bookingDetailTitle">Chi tiết đặt vé</h5>
+                    <p class="mb-0 text-secondary small" id="bookingDetailCode"></p>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Đóng"></button>
+            </div>
+            <div class="modal-body" id="bookingDetailBody">
+                <div class="text-center py-5">
+                    <div class="spinner-border text-danger"></div>
+                    <p class="mt-2">Đang tải chi tiết...</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+                    Đóng
+                </button>
+                <button type="button" class="btn btn-danger" id="cancelBookingDetailBtn">
+                    <i class="bi bi-x-circle"></i> Hủy vé
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../../../JS/site.js"></script>
+
+<script src="../../../JS/bookings.js"></script>
+
+</body>
+</html>

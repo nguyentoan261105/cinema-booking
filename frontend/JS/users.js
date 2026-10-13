@@ -160,17 +160,7 @@ function setupEvents() {
     }
 
 
-    const logoutButton =
-        document.getElementById("adminSidebarLogout");
-
-    if (logoutButton) {
-
-        logoutButton.addEventListener(
-            "click",
-            logout
-        );
-
-    }
+    
 
 }
 
@@ -1261,4 +1251,19 @@ function escapeHtml(value) {
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
 
+}
+const logoutButton = document.getElementById("adminSidebarLogout");
+
+if (logoutButton) {
+    logoutButton.addEventListener("click", function () {
+        const confirmLogout = confirm("Bạn có chắc muốn đăng xuất?");
+
+        if (confirmLogout) {
+            localStorage.removeItem("token");
+            localStorage.removeItem("user");
+            sessionStorage.clear();
+
+            window.location.href = "../Account/Login.html";
+        }
+    });
 }

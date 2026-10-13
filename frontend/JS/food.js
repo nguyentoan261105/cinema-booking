@@ -1308,3 +1308,1211 @@ document.addEventListener(
 
     }
 );
+
+// =====================================================
+    // ADMIN QUAN LY DO AN
+// =====================================================
+
+const ADMIN_FOODS_API = `${API_BASE_URL}/foods`;
+const ADMIN_CATEGORIES_API = `${API_BASE_URL}/foodcategories`;
+
+let adminFoodsData = [];
+let adminFoodCategories = [];
+
+function adminFoodsPageExists() {
+    return document.getElementById("foodsTable") !== null;
+}
+
+function adminFoodsGetToken() {
+    const keys = [
+        "token",
+        "accessToken",
+        "jwtToken",
+        "authToken",
+        "cinemaToken"
+    ];
+
+    for (const key of keys) {
+        const value = localStorage.getItem(key);
+
+        if (!value) continue;
+
+        try {
+            const parsed = JSON.parse(value);
+
+            if (typeof parsed === "string") {
+                return parsed;
+            }
+
+            if (parsed && typeof parsed === "object") {
+                return parsed.token ||
+                    parsed.accessToken ||
+                    parsed.access_token ||
+                    "";
+            }
+        } catch {
+            return value;
+        }
+    }
+
+    return "";
+}
+
+async function adminFoodsRequest(url, options = {}) {
+    const headers = {
+        ...(options.headers || {})
+    };
+
+    if (options.body !== undefined) {
+        headers["Content-Type"] = "application/json";
+    }
+
+    const token = adminFoodsGetToken();
+
+    if (token) {
+        headers["Authorization"] = `Bearer ${token}`;
+    }
+
+    const response = await fetch(url, {
+        ...options,
+        headers
+    });
+
+    if (!response.ok) {
+        let message = `Lỗi API: ${response.status}`;
+
+        try {
+            const text = await response.text();
+
+            if (text) {
+                try {
+                    const data = JSON.parse(text);
+                    message = data.message ||
+                        data.title ||
+                        data.detail ||
+                        data.error ||
+                        text;
+                } catch {
+                    message = text;
+                }
+            }
+        } catch {
+            // Khong doc duoc noi dung loi.
+        }
+
+        throw new Error(message);
+    }
+
+    if (response.status === 204) {
+        return null;
+    }
+
+    const text = await response.text();
+
+    return text ? JSON.parse(text) : null;
+}
+
+function adminFoodsList(data) {
+    if (Array.isArray(data)) return data;
+
+    if (!data || typeof data !== "object") return [];
+
+    for (const key of [
+        "items",
+        "data",
+        "results",
+        "foods",
+        "categories",
+        "$values"
+    ]) {
+        if (Array.isArray(data[key])) {
+            return data[key];
+        }
+    }
+
+    return [];
+}
+
+function adminFoodsId(item) {
+    return item?.id ?? item?.Id ?? "";
+}
+
+function adminFoodsName(item) {
+    return item?.name ?? item?.Name ?? "";
+}
+
+function adminFoodsCategoryId(food) {
+    return food?.foodCategoryId ??
+        food?.FoodCategoryId ??
+        food?.categoryId ??
+        food?.CategoryId ??
+        food?.foodCategory?.id ??
+        food?.foodCategory?.Id ??
+        food?.category?.id ??
+        food?.category?.Id ??
+        "";
+}
+
+function adminFoodsCategoryName(food) {
+    const embedded =
+        food?.foodCategory ||
+        food?.FoodCategory ||
+        food?.category ||
+        food?.Category;
+
+    if (embedded) {
+        return adminFoodsName(embedded);
+    }
+
+    const id = adminFoodsCategoryId(food);
+
+    const category = adminFoodCategories.find(
+        item => String(adminFoodsId(item)) === String(id)
+    );
+
+    return category
+        ? adminFoodsName(category)
+        : "Chưa phân loại";
+}
+
+function adminFoodsActive(food) {
+    const value = food?.isActive ??
+        food?.IsActive ??
+        food?.isAvailable ??
+        food?.IsAvailable;
+
+    if (value === undefined || value === null) {
+        return true;
+    }
+
+    return value === true ||
+        value === 1 ||
+        value === "true";
+}
+
+function adminFoodsEscape(value) {
+    return String(value ?? "").replace(
+        /[&<>"']/g,
+        char => ({
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#39;"
+        })[char]
+    );
+}
+
+
+function adminFoodsMoney(value) {
+    const price = Number(value);
+
+    if (!Number.isFinite(price)) {
+        return "0 ₫";
+    }
+
+    return Math.round(price).toLocaleString("vi-VN") + " ₫";
+}
+
+
+
+function adminFoodsImage(url) {
+    if (!url) return "";
+
+    url = String(url).trim();
+
+    // Neu la URL day du thi giu nguyen
+    if (/^https?:\/\//i.test(url)) {
+        return url;
+    }
+
+    // Neu URL bat dau bang //
+    if (url.startsWith("//")) {
+        return window.location.protocol + url;
+    }
+
+    // Neu la duong dan tu goc website
+    if (url.startsWith("/")) {
+        return BACKEND_URL + url;
+    }
+
+    // Neu la duong dan tuong doi
+    return `${BACKEND_URL}/${url}`;
+}
+
+
+function adminFoodsAlert(message, type = "success") {
+    const element = document.getElementById("foodsAlert");
+
+    if (!element) {
+        alert(message);
+        return;
+    }
+
+    element.textContent = message;
+    element.style.display = "block";
+
+    element.classList.remove(
+        "alert-success",
+        "alert-danger",
+        "alert-warning",
+        "alert-info"
+    );
+
+    element.classList.add(
+        type === "success" ? "alert-success" :
+        type === "warning" ? "alert-warning" :
+        type === "info" ? "alert-info" :
+        "alert-danger"
+    );
+
+    clearTimeout(adminFoodsAlert.timer);
+
+    adminFoodsAlert.timer = setTimeout(() => {
+        element.style.display = "none";
+    }, 5000);
+}
+
+// -----------------------------------------------------
+// TAI DU LIEU
+// -----------------------------------------------------
+
+async function adminFoodsLoadCategories() {
+    try {
+        const data = await adminFoodsRequest(
+            ADMIN_CATEGORIES_API
+        );
+
+        adminFoodCategories = adminFoodsList(data);
+
+        adminFoodsRenderCategoryOptions();
+        adminFoodsStatistics();
+    } catch (error) {
+        console.error("Loi tai danh muc:", error);
+
+        adminFoodsAlert(
+            "Không tải được danh mục. Hãy kiểm tra API danh mục.",
+            "danger"
+        );
+    }
+}
+
+
+async function adminFoodsLoad() {
+    const table = document.getElementById("foodsTable");
+
+    if (table) {
+        table.innerHTML = `
+            <tr>
+                <td colspan="6" style="text-align:center;">
+                    Đang tải dữ liệu...
+                </td>
+            </tr>
+        `;
+    }
+
+    try {
+        // Lay ca san pham dang kinh doanh va ngung kinh doanh
+        const data = await adminFoodsRequest(
+            `${ADMIN_FOODS_API}?includeInactive=true`
+        );
+
+        adminFoodsData = adminFoodsList(data);
+
+        adminFoodsRenderTable();
+        adminFoodsStatistics();
+
+        console.log("Danh sach san pham:", adminFoodsData);
+    } catch (error) {
+        console.error("Loi tai san pham:", error);
+
+        if (table) {
+            table.innerHTML = `
+                <tr>
+                    <td colspan="6" style="text-align:center;">
+                        Không thể tải danh sách sản phẩm.
+                    </td>
+                </tr>
+            `;
+        }
+
+        adminFoodsAlert(error.message, "danger");
+    }
+}
+
+
+// -----------------------------------------------------
+// DANH MUC
+// -----------------------------------------------------
+
+function adminFoodsRenderCategoryOptions() {
+    const filter = document.getElementById(
+        "foodCategoryFilter"
+    );
+
+    const select = document.getElementById("foodCategory");
+
+    const oldFilter = filter?.value || "";
+    const oldSelect = select?.value || "";
+
+    if (filter) {
+        filter.innerHTML =
+            '<option value="">Tất cả danh mục</option>';
+
+        adminFoodCategories.forEach(category => {
+            filter.insertAdjacentHTML(
+                "beforeend",
+                `<option value="${adminFoodsEscape(
+                    adminFoodsId(category)
+                )}">${adminFoodsEscape(
+                    adminFoodsName(category)
+                )}</option>`
+            );
+        });
+
+        filter.value = oldFilter;
+    }
+
+    if (select) {
+        select.innerHTML =
+            '<option value="">Chọn danh mục</option>';
+
+        adminFoodCategories.forEach(category => {
+            select.insertAdjacentHTML(
+                "beforeend",
+                `<option value="${adminFoodsEscape(
+                    adminFoodsId(category)
+                )}">${adminFoodsEscape(
+                    adminFoodsName(category)
+                )}</option>`
+            );
+        });
+
+        select.value = oldSelect;
+    }
+
+    adminFoodsRenderCategoryManager();
+}
+
+function adminFoodsRenderCategoryManager() {
+    const modal = document.getElementById(
+        "foodCategoryModal"
+    );
+
+    const content = modal?.querySelector(
+        ".admin-modal-content"
+    );
+
+    const footer = content?.querySelector(
+        ".admin-modal-footer"
+    );
+
+    if (!content || !footer) return;
+
+    let list = document.getElementById(
+        "foodCategoryManagerList"
+    );
+
+    if (!list) {
+        list = document.createElement("div");
+        list.id = "foodCategoryManagerList";
+        list.className = "p-3";
+
+        content.insertBefore(list, footer);
+    }
+
+    if (adminFoodCategories.length === 0) {
+        list.innerHTML = "<p>Chưa có danh mục.</p>";
+        return;
+    }
+
+    list.innerHTML = `
+        <h3 style="font-size:16px;">Danh sách danh mục</h3>
+
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Tên danh mục</th>
+                    <th>Thao tác</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                ${adminFoodCategories.map(category => `
+                    <tr>
+                        <td>${adminFoodsEscape(
+                            adminFoodsName(category)
+                        )}</td>
+
+                        <td>
+                            <div class="food-actions">
+                                <button
+                                    type="button"
+                                    class="food-edit-btn"
+                                    data-category-action="edit"
+                                    data-id="${adminFoodsEscape(
+                                        adminFoodsId(category)
+                                    )}">
+                                    <i class="bi bi-pencil-square"></i>
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="food-delete-btn"
+                                    data-category-action="delete"
+                                    data-id="${adminFoodsEscape(
+                                        adminFoodsId(category)
+                                    )}">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `).join("")}
+            </tbody>
+        </table>
+    `;
+}
+
+function adminFoodsOpenCategoryModal() {
+    document.getElementById("foodCategoryForm")?.reset();
+    document.getElementById("foodCategoryId").value = "";
+    document.getElementById(
+        "foodCategoryModalTitle"
+    ).textContent = "Thêm danh mục";
+
+    document.getElementById(
+        "saveFoodCategoryBtn"
+    ).textContent = "Lưu danh mục";
+
+    adminFoodsRenderCategoryManager();
+
+    const modal = document.getElementById(
+        "foodCategoryModal"
+    );
+
+    if (modal) {
+        modal.style.display = "flex";
+        document.body.style.overflow = "hidden";
+    }
+}
+
+function adminFoodsCloseCategoryModal() {
+    const modal = document.getElementById(
+        "foodCategoryModal"
+    );
+
+    if (modal) modal.style.display = "none";
+
+    adminFoodsRestoreScroll();
+}
+
+function adminFoodsEditCategory(id) {
+    const category = adminFoodCategories.find(
+        item => String(adminFoodsId(item)) === String(id)
+    );
+
+    if (!category) return;
+
+    document.getElementById("foodCategoryId").value =
+        adminFoodsId(category);
+
+    document.getElementById("foodCategoryName").value =
+        adminFoodsName(category);
+
+    document.getElementById(
+        "foodCategoryModalTitle"
+    ).textContent = "Cập nhật danh mục";
+
+    document.getElementById(
+        "saveFoodCategoryBtn"
+    ).textContent = "Cập nhật danh mục";
+}
+
+async function adminFoodsSaveCategory(event) {
+    event.preventDefault();
+
+    const id = document.getElementById(
+        "foodCategoryId"
+    ).value;
+
+    const name = document.getElementById(
+        "foodCategoryName"
+    ).value.trim();
+
+    const button = document.getElementById(
+        "saveFoodCategoryBtn"
+    );
+
+    if (!name) {
+        adminFoodsAlert(
+            "Vui lòng nhập tên danh mục.",
+            "warning"
+        );
+        return;
+    }
+
+    try {
+        button.disabled = true;
+
+        await adminFoodsRequest(
+            id
+                ? `${ADMIN_CATEGORIES_API}/${encodeURIComponent(id)}`
+                : ADMIN_CATEGORIES_API,
+            {
+                method: id ? "PUT" : "POST",
+                body: JSON.stringify({ name })
+            }
+        );
+
+        await adminFoodsLoadCategories();
+        await adminFoodsLoad();
+
+        document.getElementById(
+            "foodCategoryForm"
+        ).reset();
+
+        document.getElementById("foodCategoryId").value = "";
+
+        adminFoodsAlert(
+            id ? "Đã cập nhật danh mục." : "Đã thêm danh mục.",
+            "success"
+        );
+    } catch (error) {
+        adminFoodsAlert(error.message, "danger");
+    } finally {
+        button.disabled = false;
+
+        button.textContent = document.getElementById(
+            "foodCategoryId"
+        ).value
+            ? "Cập nhật danh mục"
+            : "Lưu danh mục";
+    }
+}
+
+async function adminFoodsDeleteCategory(id) {
+    const category = adminFoodCategories.find(
+        item => String(adminFoodsId(item)) === String(id)
+    );
+
+    if (!category) return;
+
+    if (!confirm(
+        `Bạn có chắc muốn xóa danh mục "${adminFoodsName(category)}"?`
+    )) {
+        return;
+    }
+
+    try {
+        await adminFoodsRequest(
+            `${ADMIN_CATEGORIES_API}/${encodeURIComponent(id)}`,
+            { method: "DELETE" }
+        );
+
+        await adminFoodsLoadCategories();
+        await adminFoodsLoad();
+
+        adminFoodsAlert("Đã xóa danh mục.", "success");
+    } catch (error) {
+        adminFoodsAlert(error.message, "danger");
+    }
+}
+
+// -----------------------------------------------------
+// THONG KE
+// -----------------------------------------------------
+
+
+function adminFoodsStatistics() {
+    const total = adminFoodsData.length;
+
+    const activeFoods = adminFoodsData.filter(function (food) {
+        return adminFoodsActive(food);
+    });
+
+    const active = activeFoods.length;
+
+    const prices = activeFoods
+        .map(function (food) {
+            return Number(food.price ?? food.Price);
+        })
+        .filter(function (price) {
+            return Number.isFinite(price) && price > 0
+        });
+
+    const average = prices.length > 0
+        ? prices.reduce(function (sum, price) {
+            return sum + price;
+        }, 0) / prices.length
+        : 0;
+
+    const totalElement = document.getElementById("totalFoods");
+    const activeElement = document.getElementById("activeFoods");
+    const categoryElement = document.getElementById("totalFoodCategories");
+    const averageElement = document.getElementById("averageFoodPrice");
+
+    if (totalElement) totalElement.textContent = total;
+    if (activeElement) activeElement.textContent = active;
+    if (categoryElement) {
+        categoryElement.textContent = adminFoodCategories.length;
+    }
+    if (averageElement) {
+        averageElement.textContent = adminFoodsMoney(average);
+    }
+}
+
+
+// -----------------------------------------------------
+// BANG SAN PHAM
+// -----------------------------------------------------
+
+function adminFoodsRenderTable() {
+    const table = document.getElementById("foodsTable");
+
+    if (!table) return;
+
+    const keyword = (
+        document.getElementById("foodSearch")?.value || ""
+    ).trim().toLowerCase();
+
+    const categoryId = document.getElementById(
+        "foodCategoryFilter"
+    )?.value || "";
+
+    const status = document.getElementById(
+        "foodStatusFilter"
+    )?.value || "";
+
+    const filtered = adminFoodsData.filter(food => {
+        const name = adminFoodsName(food).toLowerCase();
+
+        const description = String(
+            food.description ?? food.Description ?? ""
+        ).toLowerCase();
+
+        const categoryName =
+            adminFoodsCategoryName(food).toLowerCase();
+
+        const matchesText =
+            name.includes(keyword) ||
+            description.includes(keyword) ||
+            categoryName.includes(keyword);
+
+        const matchesCategory =
+            !categoryId ||
+            String(adminFoodsCategoryId(food)) ===
+                String(categoryId);
+
+        const active = adminFoodsActive(food);
+
+        const matchesStatus =
+            status === "" || String(active) === status;
+
+        return matchesText && matchesCategory && matchesStatus;
+    });
+
+    const result = document.getElementById("foodsResultText");
+
+    if (result) {
+        result.textContent =
+            `Hiển thị ${filtered.length} / ${adminFoodsData.length} sản phẩm`;
+    }
+
+    if (!filtered.length) {
+        table.innerHTML = `
+            <tr>
+                <td colspan="6" style="text-align:center;">
+                    Không tìm thấy sản phẩm.
+                </td>
+            </tr>
+        `;
+        return;
+    }
+
+    table.innerHTML = filtered.map((food, index) => {
+        const id = adminFoodsId(food);
+        const name = adminFoodsName(food);
+
+        const image = adminFoodsImage(
+            food.imageUrl ??
+            food.ImageUrl ??
+            food.image ??
+            food.Image ??
+            ""
+        );
+
+        const active = adminFoodsActive(food);
+
+        const imageHtml = image
+            ? `<img src="${adminFoodsEscape(image)}"
+                    alt="${adminFoodsEscape(name)}"
+                    onerror="this.style.display='none'">`
+            : `<i class="bi bi-image fs-3"></i>`;
+
+        return `
+            <tr>
+                <td>${index + 1}</td>
+
+                <td>
+                    <div class="food-item-info">
+                        ${imageHtml}
+                        <div class="food-item-name">
+                            ${adminFoodsEscape(name)}
+                        </div>
+                    </div>
+                </td>
+
+                <td>${adminFoodsEscape(
+                    adminFoodsCategoryName(food)
+                )}</td>
+
+                <td>
+                    <strong>${adminFoodsMoney(
+                        food.price ?? food.Price
+                    )}</strong>
+                </td>
+
+                <td>
+                    <span class="food-status ${
+                        active ? "active" : "inactive"
+                    }">
+                        ${active ? "Đang kinh doanh" : "Ngừng kinh doanh"}
+                    </span>
+                </td>
+
+                <td>
+                    <div class="food-actions">
+                        <button
+                            type="button"
+                            class="food-edit-btn"
+                            data-food-action="edit"
+                            data-id="${adminFoodsEscape(id)}"
+                            title="Sửa">
+                            <i class="bi bi-pencil-square"></i>
+                        </button>
+
+                        <button
+                            type="button"
+                            class="food-delete-btn"
+                            data-food-action="delete"
+                            data-id="${adminFoodsEscape(id)}"
+                            title="Xóa">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `;
+    }).join("");
+}
+
+// -----------------------------------------------------
+// MODAL SAN PHAM
+// -----------------------------------------------------
+
+function adminFoodsOpenModal() {
+    const modal = document.getElementById("foodModal");
+
+    if (modal) {
+        modal.style.display = "flex";
+        document.body.style.overflow = "hidden";
+    }
+}
+
+function adminFoodsCloseModal() {
+    const modal = document.getElementById("foodModal");
+
+    if (modal) modal.style.display = "none";
+
+    adminFoodsRestoreScroll();
+}
+
+function adminFoodsRestoreScroll() {
+    const foodModal = document.getElementById("foodModal");
+    const categoryModal = document.getElementById(
+        "foodCategoryModal"
+    );
+
+    if (
+        foodModal?.style.display !== "flex" &&
+        categoryModal?.style.display !== "flex"
+    ) {
+        document.body.style.overflow = "";
+    }
+}
+
+function adminFoodsResetForm() {
+    document.getElementById("foodForm")?.reset();
+    document.getElementById("foodId").value = "";
+    document.getElementById("foodStatus").checked = true;
+
+    const preview = document.getElementById(
+        "foodPreviewImage"
+    );
+
+    if (preview) {
+        preview.src = "";
+        preview.style.display = "none";
+    }
+
+    document.getElementById(
+        "foodModalTitle"
+    ).textContent = "Thêm sản phẩm";
+
+    document.getElementById(
+        "saveFoodBtn"
+    ).textContent = "Lưu sản phẩm";
+}
+
+function adminFoodsAdd() {
+    adminFoodsResetForm();
+    adminFoodsRenderCategoryOptions();
+    adminFoodsOpenModal();
+}
+
+function adminFoodsEdit(id) {
+    const food = adminFoodsData.find(
+        item => String(adminFoodsId(item)) === String(id)
+    );
+
+    if (!food) return;
+
+    adminFoodsResetForm();
+    adminFoodsRenderCategoryOptions();
+
+    document.getElementById("foodId").value =
+        adminFoodsId(food);
+
+    document.getElementById("foodName").value =
+        adminFoodsName(food);
+
+    document.getElementById("foodCategory").value =
+        adminFoodsCategoryId(food);
+
+    document.getElementById("foodPrice").value =
+        food.price ?? food.Price ?? 0;
+
+    document.getElementById("foodImage").value =
+        food.imageUrl ?? food.ImageUrl ?? "";
+
+    document.getElementById("foodDescription").value =
+        food.description ?? food.Description ?? "";
+
+    document.getElementById("foodStatus").checked =
+        adminFoodsActive(food);
+
+    document.getElementById(
+        "foodModalTitle"
+    ).textContent = "Cập nhật sản phẩm";
+
+    document.getElementById(
+        "saveFoodBtn"
+    ).textContent = "Cập nhật sản phẩm";
+
+    adminFoodsPreviewImage();
+    adminFoodsOpenModal();
+}
+
+function adminFoodsPreviewImage() {
+    const input = document.getElementById("foodImage");
+    const preview = document.getElementById(
+        "foodPreviewImage"
+    );
+
+    if (!input || !preview) return;
+
+    const url = adminFoodsImage(input.value);
+
+    if (!url) {
+        preview.removeAttribute("src");
+        preview.style.display = "none";
+        return;
+    }
+
+    preview.onload = () => {
+        preview.style.display = "block";
+    };
+
+    preview.onerror = () => {
+        preview.style.display = "none";
+    };
+
+    preview.src = url;
+}
+
+async function adminFoodsSave(event) {
+    event.preventDefault();
+
+    const id = document.getElementById("foodId").value;
+    const name = document.getElementById("foodName").value.trim();
+    const categoryId = document.getElementById(
+        "foodCategory"
+    ).value;
+
+    const price = Number(
+        document.getElementById("foodPrice").value
+    );
+
+    const button = document.getElementById("saveFoodBtn");
+
+    if (!name || !categoryId || !Number.isFinite(price) || price < 0) {
+        adminFoodsAlert(
+            "Vui lòng kiểm tra tên, danh mục và đơn giá.",
+            "warning"
+        );
+        return;
+    }
+
+    const oldFood = adminFoodsData.find(
+        item => String(adminFoodsId(item)) === String(id)
+    );
+
+    const payload = {
+        name,
+        categoryId: Number(categoryId),
+        foodCategoryId: Number(categoryId),
+        price,
+        imageUrl:
+            document.getElementById("foodImage").value.trim() || null,
+        description:
+            document.getElementById("foodDescription").value.trim() || null,
+        isActive:
+            document.getElementById("foodStatus").checked,
+        isAvailable:
+            document.getElementById("foodStatus").checked
+    };
+
+    const quantity =
+        oldFood?.quantity ?? oldFood?.Quantity;
+
+    if (quantity !== undefined) {
+        payload.quantity = Number(quantity);
+    }
+
+    try {
+        button.disabled = true;
+        button.textContent = "Đang lưu...";
+
+        await adminFoodsRequest(
+            id
+                ? `${ADMIN_FOODS_API}/${encodeURIComponent(id)}`
+                : ADMIN_FOODS_API,
+            {
+                method: id ? "PUT" : "POST",
+                body: JSON.stringify(payload)
+            }
+        );
+
+        adminFoodsCloseModal();
+
+        await adminFoodsLoad();
+
+        adminFoodsAlert(
+            id
+                ? "Cập nhật sản phẩm thành công."
+                : "Thêm sản phẩm thành công.",
+            "success"
+        );
+    } catch (error) {
+        adminFoodsAlert(error.message, "danger");
+    } finally {
+        button.disabled = false;
+        button.textContent = "Lưu sản phẩm";
+    }
+}
+
+async function adminFoodsDelete(id) {
+    const food = adminFoodsData.find(
+        item => String(adminFoodsId(item)) === String(id)
+    );
+
+    if (!food) return;
+
+    if (!confirm(
+        `Bạn có chắc muốn xóa "${adminFoodsName(food)}"?`
+    )) {
+        return;
+    }
+
+    try {
+        await adminFoodsRequest(
+            `${ADMIN_FOODS_API}/${encodeURIComponent(id)}`,
+            { method: "DELETE" }
+        );
+
+        await adminFoodsLoad();
+
+        adminFoodsAlert(
+            "Xóa sản phẩm thành công.",
+            "success"
+        );
+    } catch (error) {
+        adminFoodsAlert(error.message, "danger");
+    }
+}
+
+// -----------------------------------------------------
+// GAN SU KIEN CHO TRANG ADMIN
+// -----------------------------------------------------
+
+function adminFoodsSetupEvents() {
+    document.getElementById("addFoodBtn")
+        ?.addEventListener("click", adminFoodsAdd);
+
+    document.getElementById("closeFoodModal")
+        ?.addEventListener("click", adminFoodsCloseModal);
+
+    document.getElementById("cancelFoodBtn")
+        ?.addEventListener("click", adminFoodsCloseModal);
+
+    document.getElementById("foodForm")
+        ?.addEventListener("submit", adminFoodsSave);
+
+    document.getElementById("foodImage")
+        ?.addEventListener("input", adminFoodsPreviewImage);
+
+    document.getElementById("foodImage")
+        ?.addEventListener("change", adminFoodsPreviewImage);
+
+    document.getElementById("foodSearch")
+        ?.addEventListener("input", adminFoodsRenderTable);
+
+    document.getElementById("foodCategoryFilter")
+        ?.addEventListener("change", adminFoodsRenderTable);
+
+    document.getElementById("foodStatusFilter")
+        ?.addEventListener("change", adminFoodsRenderTable);
+
+    document.getElementById("filterFoodsBtn")
+        ?.addEventListener("click", adminFoodsRenderTable);
+
+    document.getElementById("resetFoodsBtn")
+        ?.addEventListener("click", () => {
+            document.getElementById("foodSearch").value = "";
+            document.getElementById("foodCategoryFilter").value = "";
+            document.getElementById("foodStatusFilter").value = "";
+
+            adminFoodsRenderTable();
+        });
+
+    document.getElementById("refreshFoodsBtn")
+        ?.addEventListener("click", async () => {
+            await adminFoodsLoadCategories();
+            await adminFoodsLoad();
+        });
+
+    document.getElementById("addFoodCategoryBtn")
+        ?.addEventListener("click", adminFoodsOpenCategoryModal);
+
+    document.getElementById("closeFoodCategoryModal")
+        ?.addEventListener("click", adminFoodsCloseCategoryModal);
+
+    document.getElementById("cancelFoodCategoryBtn")
+        ?.addEventListener("click", adminFoodsCloseCategoryModal);
+
+    document.getElementById("foodCategoryForm")
+        ?.addEventListener("submit", adminFoodsSaveCategory);
+
+    document.getElementById("foodsTable")
+        ?.addEventListener("click", event => {
+            const button = event.target.closest(
+                "button[data-food-action]"
+            );
+
+            if (!button) return;
+
+            if (button.dataset.foodAction === "edit") {
+                adminFoodsEdit(button.dataset.id);
+            } else if (button.dataset.foodAction === "delete") {
+                adminFoodsDelete(button.dataset.id);
+            }
+        });
+
+    document.getElementById("foodCategoryModal")
+        ?.addEventListener("click", event => {
+            if (event.target.id === "foodCategoryModal") {
+                adminFoodsCloseCategoryModal();
+                return;
+            }
+
+            const button = event.target.closest(
+                "button[data-category-action]"
+            );
+
+            if (!button) return;
+
+            if (button.dataset.categoryAction === "edit") {
+                adminFoodsEditCategory(button.dataset.id);
+            } else if (button.dataset.categoryAction === "delete") {
+                adminFoodsDeleteCategory(button.dataset.id);
+            }
+        });
+
+    document.getElementById("foodModal")
+        ?.addEventListener("click", event => {
+            if (event.target.id === "foodModal") {
+                adminFoodsCloseModal();
+            }
+        });
+
+    document.addEventListener("keydown", event => {
+        if (event.key === "Escape") {
+            adminFoodsCloseModal();
+            adminFoodsCloseCategoryModal();
+        }
+    });
+}
+
+// =====================================================
+// KHOI DONG CHUNG
+// =====================================================
+
+document.addEventListener("DOMContentLoaded", async () => {
+    // Chi chay phan quan tri neu dang o Foods.html.
+    // Trang dat do an cua khach hang khong bi anh huong.
+    if (!adminFoodsPageExists()) {
+        return;
+    }
+
+    adminFoodsSetupEvents();
+
+    await adminFoodsLoadCategories();
+    await adminFoodsLoad();
+});
+
+/* CAP NHAT CHU THICH TRANG THAI KINH DOANH */
+document.addEventListener("DOMContentLoaded", function () {
+    const foodStatus = document.getElementById("foodStatus");
+    const foodStatusText = document.getElementById("foodStatusText");
+
+    if (!foodStatus || !foodStatusText) return;
+
+    function updateFoodStatusText() {
+        if (foodStatus.checked) {
+            foodStatusText.textContent = "Đang kinh doanh";
+            foodStatusText.classList.remove("inactive");
+        } else {
+            foodStatusText.textContent = "Ngừng kinh doanh";
+            foodStatusText.classList.add("inactive");
+        }
+    }
+
+    foodStatus.addEventListener("change", updateFoodStatusText);
+    updateFoodStatusText();
+});
+const logoutButton = document.getElementById("adminSidebarLogout");
+
+if (logoutButton) {
+    logoutButton.addEventListener("click", function () {
+        const confirmLogout = confirm("Bạn có chắc muốn đăng xuất?");
+
+        if (confirmLogout) {
+            localStorage.removeItem("token");
+            localStorage.removeItem("user");
+            sessionStorage.clear();
+
+            window.location.href = "../Account/Login.html";
+        }
+    });
+}

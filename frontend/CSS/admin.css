@@ -5981,3 +5981,1651 @@ body {
         flex: 1;
     }
 }
+/* =========================================================
+   SHOWTIME MODAL - GIAO DIEN DEP
+   ========================================================= */
+
+.showtime-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+
+    display: none;
+    align-items: center;
+    justify-content: center;
+
+    padding: 24px;
+
+    background: rgba(15, 23, 42, 0.68);
+    backdrop-filter: blur(5px);
+
+    animation: showtimeOverlayIn 0.2s ease;
+}
+
+.showtime-modal.show {
+    display: flex;
+}
+
+
+/* =========================================================
+   MODAL BOX
+   ========================================================= */
+
+.showtime-modal-dialog {
+    position: relative;
+
+    width: 100%;
+    max-width: 720px;
+
+    max-height: calc(100vh - 48px);
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;
+
+    background: #ffffff;
+
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    border-radius: 20px;
+
+    box-shadow:
+        0 30px 80px rgba(0, 0, 0, 0.25),
+        0 10px 30px rgba(0, 0, 0, 0.12);
+
+    animation: showtimeModalIn 0.25s ease;
+}
+
+
+@keyframes showtimeOverlayIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+
+@keyframes showtimeModalIn {
+    from {
+        opacity: 0;
+        transform: translateY(-25px) scale(0.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.showtime-modal-header {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 22px 26px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ffffff 0%,
+            #fff8f8 100%
+        );
+
+    border-bottom: 1px solid #eeeeee;
+}
+
+
+.showtime-modal-title {
+    display: flex;
+    align-items: center;
+
+    gap: 13px;
+
+    margin: 0;
+
+    color: #1f2937;
+
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+
+.showtime-modal-title span:first-child {
+    width: 44px;
+    height: 44px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #e50914,
+            #b20710
+        );
+
+    color: #ffffff;
+
+    font-size: 19px;
+
+    box-shadow:
+        0 6px 15px rgba(229, 9, 20, 0.22);
+}
+
+
+.showtime-modal-title i {
+    margin: 0;
+}
+
+
+/* =========================================================
+   CLOSE BUTTON
+   ========================================================= */
+
+.showtime-modal-close {
+    width: 38px;
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border: 0;
+    border-radius: 10px;
+
+    background: #f5f5f5;
+
+    color: #555555;
+
+    font-size: 17px;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.showtime-modal-close:hover {
+    background: #e50914;
+    color: #ffffff;
+
+    transform: rotate(90deg);
+}
+
+
+/* =========================================================
+   BODY
+   ========================================================= */
+
+.showtime-modal-body {
+    padding: 26px;
+
+    overflow-y: auto;
+}
+
+
+/* thanh cuon */
+
+.showtime-modal-body::-webkit-scrollbar {
+    width: 6px;
+}
+
+.showtime-modal-body::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.showtime-modal-body::-webkit-scrollbar-thumb {
+    background: #d6d6d6;
+    border-radius: 10px;
+}
+
+.showtime-modal-body::-webkit-scrollbar-thumb:hover {
+    background: #aaaaaa;
+}
+
+
+/* =========================================================
+   FORM GROUP
+   ========================================================= */
+
+.showtime-form-group {
+    margin-bottom: 20px;
+}
+
+
+.showtime-form-group:last-child {
+    margin-bottom: 0;
+}
+
+
+.showtime-form-label {
+    display: flex;
+    align-items: center;
+
+    margin-bottom: 8px;
+
+    color: #374151;
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+
+.showtime-form-label.required::after {
+    content: "*";
+
+    margin-left: 4px;
+
+    color: #e50914;
+
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   INPUT / SELECT
+   ========================================================= */
+
+.showtime-form-control {
+    width: 100%;
+    height: 46px;
+
+    padding: 0 14px;
+
+    border: 1px solid #dfe3e8;
+    border-radius: 10px;
+
+    background: #ffffff;
+
+    color: #1f2937;
+
+    font-family: inherit;
+    font-size: 14px;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+
+.showtime-form-control:hover {
+    border-color: #c5cbd3;
+}
+
+
+.showtime-form-control:focus {
+    border-color: #e50914;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 0 0 3px rgba(229, 9, 20, 0.08),
+        0 3px 10px rgba(229, 9, 20, 0.05);
+}
+
+
+.showtime-form-control::placeholder {
+    color: #a0a6ad;
+}
+
+
+.showtime-form-control:disabled {
+    background: #f5f6f7;
+
+    color: #9ca3af;
+
+    border-color: #e5e7eb;
+
+    cursor: not-allowed;
+}
+
+
+/* select */
+
+select.showtime-form-control {
+    cursor: pointer;
+}
+
+
+/* number */
+
+input[type="number"].showtime-form-control {
+    font-weight: 600;
+}
+
+
+/* datetime */
+
+input[type="datetime-local"].showtime-form-control {
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   2 COT
+   ========================================================= */
+
+.showtime-form-row {
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 18px;
+}
+
+
+/* =========================================================
+   PHAN THONG TIN PHONG
+   ========================================================= */
+
+.showtime-room-info {
+    display: none;
+
+    align-items: center;
+
+    gap: 11px;
+
+    margin-top: -7px;
+    margin-bottom: 20px;
+
+    padding: 12px 14px;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f8fafc,
+            #f9fafb
+        );
+
+    color: #4b5563;
+
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+
+.showtime-room-info.show {
+    display: flex;
+}
+
+
+.showtime-room-info i {
+    width: 30px;
+    height: 30px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 8px;
+
+    background: rgba(229, 9, 20, 0.09);
+
+    color: #e50914;
+
+    font-size: 14px;
+}
+
+
+.showtime-room-info span {
+    font-weight: 500;
+}
+
+
+/* =========================================================
+   GIA VE
+   ========================================================= */
+
+.showtime-price-wrapper {
+    position: relative;
+}
+
+
+.showtime-price-wrapper .showtime-form-control {
+    padding-right: 65px;
+}
+
+
+.showtime-price-unit {
+    position: absolute;
+
+    top: 50%;
+    right: 14px;
+
+    transform: translateY(-50%);
+
+    color: #9ca3af;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.showtime-modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    padding: 18px 26px;
+
+    border-top: 1px solid #eeeeee;
+
+    background: #fafafa;
+}
+
+
+/* =========================================================
+   BUTTON HUY
+   ========================================================= */
+
+.showtime-btn-cancel {
+    min-width: 100px;
+    height: 44px;
+
+    padding: 0 18px;
+
+    border: 1px solid #dcdfe4;
+    border-radius: 9px;
+
+    background: #ffffff;
+
+    color: #4b5563;
+
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease;
+}
+
+
+.showtime-btn-cancel:hover {
+    border-color: #c9cdd3;
+
+    background: #f3f4f6;
+
+    color: #1f2937;
+}
+
+
+/* =========================================================
+   BUTTON LUU
+   ========================================================= */
+
+.showtime-btn-save {
+    min-width: 145px;
+    height: 44px;
+
+    padding: 0 20px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    border: 0;
+    border-radius: 9px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #e50914,
+            #c70812
+        );
+
+    color: #ffffff;
+
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 5px 14px rgba(229, 9, 20, 0.2);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+
+.showtime-btn-save:hover {
+    background:
+        linear-gradient(
+            135deg,
+            #f20b17,
+            #d20813
+        );
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 7px 18px rgba(229, 9, 20, 0.28);
+}
+
+
+.showtime-btn-save:active {
+    transform: translateY(0);
+}
+
+
+.showtime-btn-save:disabled {
+    opacity: 0.65;
+
+    transform: none;
+
+    cursor: not-allowed;
+
+    box-shadow: none;
+}
+
+
+/* =========================================================
+   DELETE MODAL
+   ========================================================= */
+
+.delete-showtime-icon {
+    width: 62px;
+    height: 62px;
+
+    margin: 0 auto 16px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #fff1f2;
+
+    color: #dc3545;
+
+    font-size: 25px;
+
+    box-shadow:
+        0 5px 15px rgba(220, 53, 69, 0.12);
+}
+
+
+.delete-showtime-content {
+    padding: 26px;
+
+    text-align: center;
+}
+
+
+.delete-showtime-content h4 {
+    margin: 0 0 8px;
+
+    color: #1f2937;
+
+    font-size: 19px;
+    font-weight: 700;
+}
+
+
+.delete-showtime-content p {
+    margin: 0;
+
+    color: #6b7280;
+
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+
+.delete-showtime-info {
+    margin-top: 16px;
+
+    padding: 13px 15px;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+
+    background: #f8fafc;
+
+    color: #374151;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+    .showtime-modal {
+        padding: 12px;
+    }
+
+
+    .showtime-modal-dialog {
+        max-height: calc(100vh - 24px);
+
+        border-radius: 16px;
+    }
+
+
+    .showtime-modal-header {
+        padding: 17px 18px;
+    }
+
+
+    .showtime-modal-body {
+        padding: 20px 18px;
+    }
+
+
+    .showtime-modal-footer {
+        padding: 15px 18px;
+    }
+
+
+    .showtime-form-row {
+        grid-template-columns: 1fr;
+
+        gap: 0;
+    }
+
+
+    .showtime-modal-title {
+        font-size: 17px;
+    }
+
+
+    .showtime-modal-title span:first-child {
+        width: 38px;
+        height: 38px;
+
+        border-radius: 10px;
+
+        font-size: 16px;
+    }
+
+
+    .showtime-modal-close {
+        width: 34px;
+        height: 34px;
+    }
+
+
+    .showtime-btn-cancel,
+    .showtime-btn-save {
+        flex: 1;
+
+        min-width: 0;
+    }
+
+}
+
+
+@media (max-width: 480px) {
+
+    .showtime-modal-header {
+        padding: 15px;
+    }
+
+
+    .showtime-modal-body {
+        padding: 18px 15px;
+    }
+
+
+    .showtime-modal-footer {
+        padding: 14px 15px;
+    }
+
+
+    .showtime-form-control {
+        height: 44px;
+    }
+
+}
+
+/* ================= QUAN LY DAT VE ================= */
+
+.booking-stats {
+    margin-bottom: 24px;
+}
+
+.booking-filter-card {
+    margin-bottom: 24px;
+    padding: 24px;
+}
+
+.booking-filter-grid {
+    display: grid;
+    grid-template-columns: minmax(220px, 2fr) repeat(3, minmax(145px, 1fr)) auto;
+    align-items: end;
+    gap: 16px;
+}
+
+.booking-filter-grid .admin-filter-item label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #444;
+}
+
+.booking-filter-grid .form-control,
+.booking-filter-grid .form-select {
+    min-height: 43px;
+    border-radius: 9px;
+    border-color: #e1e1e1;
+    font-size: 13px;
+}
+
+.booking-filter-grid .form-control:focus,
+.booking-filter-grid .form-select:focus {
+    border-color: #e50914;
+    box-shadow: 0 0 0 3px rgba(229, 9, 20, .08);
+}
+
+.booking-filter-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.booking-filter-actions .admin-primary-btn,
+.booking-filter-actions .btn {
+    min-height: 43px;
+    white-space: nowrap;
+}
+
+.booking-table-panel {
+    overflow: hidden;
+    border-radius: 14px;
+}
+
+.booking-table {
+    min-width: 1150px;
+    margin-bottom: 0;
+}
+
+.booking-table thead th {
+    padding: 16px 14px;
+    background: #f8f9fb;
+    color: #555;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    white-space: nowrap;
+    border-bottom: 1px solid #e9e9e9;
+}
+
+.booking-table tbody td {
+    padding: 16px 14px;
+    font-size: 13px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: middle;
+}
+
+.booking-table tbody tr:hover {
+    background: #fffafa;
+}
+
+.booking-code {
+    color: #e50914;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.booking-customer-name {
+    font-weight: 600;
+    color: #292929;
+    margin-bottom: 4px;
+}
+
+.booking-customer-email {
+    color: #777;
+    font-size: 12px;
+}
+
+.booking-movie-name {
+    max-width: 180px;
+    font-weight: 600;
+    line-height: 1.5;
+}
+
+.booking-seat-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    min-width: 70px;
+}
+
+.booking-seat-chip {
+    display: inline-block;
+    padding: 4px 7px;
+    border-radius: 5px;
+    background: #f1f1f1;
+    color: #333;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.booking-total {
+    font-weight: 700;
+    white-space: nowrap;
+    color: #222;
+}
+
+.booking-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.booking-status.pending {
+    color: #946200;
+    background: #fff1c2;
+}
+
+.booking-status.paid {
+    color: #167446;
+    background: #d9f7e7;
+}
+
+.booking-status.cancelled {
+    color: #a52834;
+    background: #fbe0e3;
+}
+
+.booking-status.used {
+    color: #2457a7;
+    background: #e0ebff;
+}
+
+.booking-action-group {
+    display: flex;
+    gap: 6px;
+}
+
+.booking-action-btn {
+    width: 34px;
+    height: 34px;
+    border: 0;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: .2s;
+}
+
+.booking-action-btn.detail {
+    color: #2457a7;
+    background: #e5edff;
+}
+
+.booking-action-btn.detail:hover {
+    color: #fff;
+    background: #2457a7;
+}
+
+.booking-action-btn.cancel {
+    color: #b02a37;
+    background: #fbe0e3;
+}
+
+.booking-action-btn.cancel:hover {
+    color: #fff;
+    background: #dc3545;
+}
+
+.booking-action-btn:disabled {
+    opacity: .4;
+    cursor: not-allowed;
+}
+
+.booking-detail-modal {
+    overflow: hidden;
+    border: 0;
+    border-radius: 16px;
+    box-shadow: 0 20px 70px rgba(0, 0, 0, .18);
+}
+
+.booking-detail-modal .modal-header {
+    padding: 22px 26px;
+    border-bottom: 1px solid #eee;
+}
+
+.booking-detail-modal .modal-title {
+    font-size: 20px;
+    font-weight: 750;
+}
+
+.booking-detail-modal .modal-body {
+    padding: 26px;
+}
+
+.booking-detail-modal .modal-footer {
+    padding: 16px 26px;
+    background: #fafafa;
+    border-top: 1px solid #eee;
+}
+
+.booking-detail-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.booking-detail-card {
+    padding: 18px;
+    border: 1px solid #ededed;
+    border-radius: 12px;
+    background: #fff;
+}
+
+.booking-detail-card h6 {
+    margin-bottom: 14px;
+    color: #e50914;
+    font-size: 14px;
+    font-weight: 750;
+}
+
+.booking-detail-line {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 7px 0;
+    font-size: 13px;
+    border-bottom: 1px dashed #eee;
+}
+
+.booking-detail-line:last-child {
+    border-bottom: 0;
+}
+
+.booking-detail-line span:first-child {
+    color: #777;
+}
+
+.booking-detail-line strong {
+    text-align: right;
+    overflow-wrap: anywhere;
+}
+
+.booking-food-table {
+    width: 100%;
+    font-size: 13px;
+}
+
+.booking-food-table th,
+.booking-food-table td {
+    padding: 10px 8px;
+    border-bottom: 1px solid #eee;
+}
+
+.booking-detail-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-top: 18px;
+    padding: 18px;
+    border-radius: 12px;
+    background: #fff1f1;
+}
+
+.booking-detail-total strong {
+    color: #e50914;
+    font-size: 22px;
+}
+
+@media (max-width: 1200px) {
+    .booking-filter-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .booking-filter-actions {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 768px) {
+    .booking-filter-card {
+        padding: 16px;
+    }
+
+    .booking-filter-grid,
+    .booking-detail-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .booking-detail-modal .modal-body {
+        padding: 16px;
+    }
+
+    .booking-detail-modal .modal-header {
+        padding: 18px;
+    }
+
+    .booking-detail-total strong {
+        font-size: 18px;
+    }
+}
+/* =====================================================
+   QUAN LY DO AN VA THUC UONG 
+===================================================== */
+
+/* THONG KE SAN PHAM */
+.admin-main > .row {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+    margin: 0 0 24px;
+}
+
+.admin-main > .row > div {
+    min-width: 0;
+}
+
+.admin-main > .row .admin-table-card {
+    height: 100%;
+    padding: 20px;
+    border-radius: 12px;
+}
+
+.admin-main > .row .admin-table-card > div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.admin-main > .row .admin-table-card p {
+    margin: 0 0 8px;
+    color: #777;
+    font-size: 14px;
+}
+
+.admin-main > .row .admin-table-card h3 {
+    margin: 0;
+    color: #252525;
+    font-size: 25px;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+.admin-main > .row .admin-table-card i {
+    color: #e53935;
+    font-size: 30px;
+    flex-shrink: 0;
+}
+
+/* BO LOC VA TIM KIEM */
+.admin-filter-box {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 16px;
+    margin-bottom: 20px;
+    background: #fff;
+    border: 1px solid #e8e8e8;
+    border-radius: 12px;
+}
+
+.admin-filter-box .admin-search-box {
+    flex: 1 1 250px;
+    min-width: 200px;
+}
+
+.admin-filter-box select {
+    min-width: 160px;
+    max-width: 100%;
+    min-height: 42px;
+    padding: 9px 12px;
+    color: #333;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 7px;
+    outline: none;
+}
+
+.admin-filter-box select:focus {
+    border-color: #e53935;
+    box-shadow: 0 0 0 3px rgba(229, 57, 53, 0.12);
+}
+
+.admin-filter-box .admin-action-btn,
+.admin-filter-box .admin-modal-cancel {
+    min-height: 42px;
+    white-space: nowrap;
+}
+
+/* KHU VUC BANG SAN PHAM */
+.admin-main .admin-table-card {
+    overflow: hidden;
+    background: #fff;
+    border: 1px solid #e8e8e8;
+    border-radius: 12px;
+}
+
+.admin-main .admin-table-card > .d-flex {
+    gap: 12px;
+}
+
+#foodsResultText {
+    margin-top: 5px;
+    color: #777;
+    font-size: 13px;
+}
+
+#foodsTable td {
+    vertical-align: middle;
+}
+
+#foodsTable td:first-child {
+    white-space: nowrap;
+}
+
+#foodsTable img {
+    width: 55px;
+    height: 55px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+/* TEN VA THONG TIN SAN PHAM TRONG BANG */
+.food-item-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 180px;
+}
+
+.food-item-info img {
+    width: 55px;
+    height: 55px;
+    flex-shrink: 0;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.food-item-name {
+    color: #252525;
+    font-weight: 600;
+}
+
+.food-item-description {
+    display: block;
+    max-width: 260px;
+    margin-top: 4px;
+    color: #777;
+    font-size: 12px;
+    overflow-wrap: anywhere;
+}
+
+/* TRANG THAI SAN PHAM */
+.food-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.food-status.active {
+    color: #198754;
+    background: #d1e7dd;
+}
+
+.food-status.inactive {
+    color: #666;
+    background: #e9ecef;
+}
+
+/* CAC NUT THAO TAC */
+.food-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.food-actions button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border: 1px solid #e2e2e2;
+    border-radius: 7px;
+    background: #fff;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.food-actions .food-edit-btn {
+    color: #0d6efd;
+}
+
+.food-actions .food-edit-btn:hover {
+    background: #e7f1ff;
+    border-color: #0d6efd;
+}
+
+.food-actions .food-delete-btn {
+    color: #dc3545;
+}
+
+.food-actions .food-delete-btn:hover {
+    background: #f8d7da;
+    border-color: #dc3545;
+}
+
+/* MODAL SAN PHAM VA DANH MUC */
+#foodModal,
+#foodCategoryModal {
+    z-index: 1050;
+}
+
+#foodModal .admin-modal-content,
+#foodCategoryModal .admin-modal-content {
+    width: min(680px, calc(100% - 30px));
+    max-height: 90vh;
+    overflow-y: auto;
+    margin: 30px auto;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+}
+
+#foodCategoryModal .admin-modal-content {
+    width: min(480px, calc(100% - 30px));
+}
+
+#foodModal .admin-modal-header,
+#foodCategoryModal .admin-modal-header {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    padding: 18px 22px;
+    background: #fff;
+    border-bottom: 1px solid #eee;
+}
+
+#foodModal .admin-modal-header h2,
+#foodCategoryModal .admin-modal-header h2 {
+    margin: 0;
+    font-size: 21px;
+    font-weight: 700;
+}
+
+#foodForm,
+#foodCategoryForm {
+    padding: 20px 22px;
+}
+
+#foodForm .movie-form-group,
+#foodCategoryForm .movie-form-group {
+    margin-bottom: 18px;
+}
+
+#foodForm .movie-form-group label,
+#foodCategoryForm .movie-form-group label {
+    display: block;
+    margin-bottom: 7px;
+    color: #333;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+#foodForm .movie-form-group input,
+#foodForm .movie-form-group select,
+#foodForm .movie-form-group textarea,
+#foodCategoryForm .movie-form-group input {
+    width: 100%;
+    min-height: 42px;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 7px;
+    background: #fff;
+    outline: none;
+    font: inherit;
+}
+
+#foodForm .movie-form-group textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+#foodForm .movie-form-group input:focus,
+#foodForm .movie-form-group select:focus,
+#foodForm .movie-form-group textarea:focus,
+#foodCategoryForm .movie-form-group input:focus {
+    border-color: #e53935;
+    box-shadow: 0 0 0 3px rgba(229, 57, 53, 0.1);
+}
+
+/* HAI COT TRONG FORM */
+#foodForm .movie-form-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+#foodForm .movie-form-row .movie-form-group {
+    min-width: 0;
+}
+
+/* XEM TRUOC ANH */
+#foodImagePreview {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 120px;
+    padding: 12px;
+    overflow: hidden;
+    border: 1px dashed #ccc;
+    border-radius: 8px;
+    background: #fafafa;
+}
+
+#foodPreviewImage {
+    display: block;
+    max-width: 100%;
+    max-height: 220px;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+/* TRANG THAI CHECKBOX */
+#foodForm .movie-active {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 0 22px 20px;
+}
+
+#foodForm .movie-active input {
+    width: 17px;
+    height: 17px;
+    accent-color: #e53935;
+    cursor: pointer;
+}
+
+#foodForm .movie-active label {
+    margin: 0;
+    cursor: pointer;
+}
+
+/* FOOTER MODAL */
+#foodModal .admin-modal-footer,
+#foodCategoryModal .admin-modal-footer {
+    position: sticky;
+    bottom: 0;
+    z-index: 2;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 15px 22px;
+    background: #fff;
+    border-top: 1px solid #eee;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1100px) {
+    .admin-main > .row {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .admin-main > .row {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    .admin-main > .row .admin-table-card {
+        padding: 14px;
+    }
+
+    .admin-main > .row .admin-table-card h3 {
+        font-size: 21px;
+    }
+
+    .admin-filter-box {
+        align-items: stretch;
+    }
+
+    .admin-filter-box .admin-search-box,
+    .admin-filter-box select {
+        width: 100%;
+        min-width: 0;
+    }
+
+    #foodModal .admin-modal-content,
+    #foodCategoryModal .admin-modal-content {
+        max-height: 92vh;
+        margin: 4vh auto;
+    }
+
+    #foodForm .movie-form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+}
+
+@media (max-width: 420px) {
+    .admin-main > .row {
+        grid-template-columns: 1fr;
+    }
+
+    #foodModal .admin-modal-header,
+    #foodCategoryModal .admin-modal-header,
+    #foodForm,
+    #foodCategoryForm {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    #foodModal .admin-modal-footer,
+    #foodCategoryModal .admin-modal-footer {
+        padding: 12px 15px;
+    }
+}
+
+/* FIX MODAL SAN PHAM BI HEADER CHE */
+
+body:has(#foodModal[style*="flex"]) #foodModal,
+#foodModal {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 99999 !important;
+
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+
+    margin: 0 !important;
+    padding: 12px !important;
+
+    display: none;
+    align-items: center;
+    justify-content: center;
+
+    overflow-y: auto !important;
+    box-sizing: border-box;
+    background: rgba(0, 0, 0, 0.6);
+}
+
+/* Khung them san pham */
+#foodModal .admin-modal-content {
+    position: relative !important;
+    z-index: 100000 !important;
+
+    width: 100%;
+    max-width: 680px;
+
+    max-height: calc(100dvh - 24px);
+    margin: auto !important;
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;
+    box-sizing: border-box;
+    background: #fff;
+}
+
+/* Tieu de modal */
+#foodModal .admin-modal-header {
+    position: relative !important;
+    top: auto !important;
+    flex-shrink: 0;
+    background: #fff;
+}
+
+/* Noi dung form */
+#foodModal #foodForm {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+/* Nut thao tac */
+#foodModal .admin-modal-footer {
+    position: relative !important;
+    bottom: auto !important;
+    flex-shrink: 0;
+    background: #fff;
+}
+
+@media (max-height: 650px) {
+    #foodModal {
+        align-items: flex-start;
+    }
+
+    #foodModal .admin-modal-content {
+        max-height: calc(100dvh - 24px);
+    }
+}
+#foodModal .food-business-status {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 0 0 18px;
+    padding: 12px 0;
+}
+
+#foodModal .food-business-status > label:first-child {
+    margin: 0;
+    font-weight: 600;
+}
+
+#foodModal .food-switch {
+    position: relative;
+    display: inline-block;
+    width: 48px;
+    height: 26px;
+    margin: 0;
+}
+
+#foodModal .food-switch input {
+    width: 0;
+    height: 0;
+    opacity: 0;
+}
+
+#foodModal .food-slider {
+    position: absolute;
+    inset: 0;
+    cursor: pointer;
+    background: #ccc;
+    border-radius: 30px;
+    transition: 0.25s;
+}
+
+#foodModal .food-slider::before {
+    position: absolute;
+    content: "";
+    width: 20px;
+    height: 20px;
+    left: 3px;
+    top: 3px;
+    background: #fff;
+    border-radius: 50%;
+    transition: 0.25s;
+}
+
+#foodModal .food-switch input:checked + .food-slider {
+    background: #198754;
+}
+
+#foodModal .food-switch input:checked + .food-slider::before {
+    transform: translateX(22px);
+}
+
+#foodModal .food-status-text {
+    font-size: 13px;
+    font-weight: 600;
+    color: #198754;
+}
+
+#foodModal .food-status-text.inactive {
+    color: #dc3545;
+}

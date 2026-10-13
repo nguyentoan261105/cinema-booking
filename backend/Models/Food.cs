@@ -1,3 +1,4 @@
+
 namespace backend.Models;
 
 public class Food
@@ -11,6 +12,8 @@ public class Food
     public int Quantity { get; set; }
 
     public string ImageUrl { get; set; } = "";
+
+    public bool IsActive { get; set; } = true;
 
     public int FoodCategoryId { get; set; }
 
