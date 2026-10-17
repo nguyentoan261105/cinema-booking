@@ -1,3 +1,6 @@
+using backend.Models;
+using backend.Services;
+using Microsoft.AspNetCore.Identity;
 using System.Text;
 using backend.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -59,6 +62,9 @@ builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped<EmailService>();
+builder.Services.AddScoped<PasswordHasher<ApplicationUser>>();
 
 // =========================
 // CORS

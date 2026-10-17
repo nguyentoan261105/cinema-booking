@@ -13,6 +13,8 @@ public class ApplicationDbContext : DbContext
 
     public DbSet<ApplicationUser> Users => Set<ApplicationUser>();
 
+    public DbSet<PasswordResetToken> PasswordResetTokens { get; set; }
+
     public DbSet<Movie> Movies => Set<Movie>();
 
     public DbSet<Cinema> Cinemas => Set<Cinema>();

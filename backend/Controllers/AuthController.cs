@@ -1,8 +1,12 @@
+using System.Security.Cryptography;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using backend.DTOs;
+using backend.Services;
 using backend.Data;
 using backend.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -14,14 +18,19 @@ namespace backend.Controllers;
 public class AuthController : ControllerBase
 {
     private readonly ApplicationDbContext _context;
+    private readonly PasswordHasher<ApplicationUser> _passwordHasher;
+    private readonly EmailService _emailService;
     private readonly IConfiguration _configuration;
 
     public AuthController(
         ApplicationDbContext context,
-        IConfiguration configuration)
+        IConfiguration configuration,
+        EmailService emailService)
     {
         _context = context;
         _configuration = configuration;
+        _emailService = emailService;
+        _passwordHasher = new PasswordHasher<ApplicationUser>();
     }
 
     // =========================================================
@@ -85,7 +94,7 @@ public class AuthController : ControllerBase
             });
         }
 
-        string email = request.Email.Trim().ToLower();
+        string email = request.Email.Trim().ToLowerInvariant();
         string phone = request.Phone.Trim();
 
         bool emailExists = await _context.Users
@@ -116,12 +125,17 @@ public class AuthController : ControllerBase
         {
             FullName = request.FullName.Trim(),
             Email = email,
-            PasswordHash = request.Password,
             Phone = phone,
             Role = "User",
             CreatedAt = DateTime.UtcNow,
             IsActive = true
         };
+
+        // Bam mat khau truoc khi luu vao database
+        user.PasswordHash = _passwordHasher.HashPassword(
+            user,
+            request.Password
+        );
 
         _context.Users.Add(user);
 
@@ -168,7 +182,7 @@ public class AuthController : ControllerBase
             });
         }
 
-        string email = request.Email.Trim().ToLower();
+        string email = request.Email.Trim().ToLowerInvariant();
 
         var user = await _context.Users
             .FirstOrDefaultAsync(x => x.Email.ToLower() == email);
@@ -191,10 +205,70 @@ public class AuthController : ControllerBase
             });
         }
 
-        // =====================================================
-        // HIEN TAI PROJECT DANG LUU PASSWORD TRUC TIEP
-        // =====================================================
-        if (user.PasswordHash != request.Password)
+        if (string.IsNullOrWhiteSpace(user.PasswordHash))
+        {
+            return Unauthorized(new
+            {
+                success = false,
+                message = "Tai khoan khong co mat khau hop le."
+            });
+        }
+
+        bool passwordValid = false;
+        bool isLegacyPassword = false;
+
+        // -----------------------------------------------------
+        // 1. Thu xac minh mat khau da duoc bam
+        // -----------------------------------------------------
+        try
+        {
+            var verifyResult = _passwordHasher.VerifyHashedPassword(
+                user,
+                user.PasswordHash,
+                request.Password
+            );
+
+            if (verifyResult == PasswordVerificationResult.Success ||
+                verifyResult == PasswordVerificationResult.SuccessRehashNeeded)
+            {
+                passwordValid = true;
+
+                // Nang cap hash neu can
+                if (verifyResult ==
+                    PasswordVerificationResult.SuccessRehashNeeded)
+                {
+                    user.PasswordHash = _passwordHasher.HashPassword(
+                        user,
+                        request.Password
+                    );
+
+                    await _context.SaveChangesAsync();
+                }
+            }
+        }
+        catch (FormatException)
+        {
+            // Co the la du lieu mat khau cu dang van ban thuong
+        }
+        catch (ArgumentException)
+        {
+            // Hash cu khong dung dinh dang mong doi
+        }
+
+        // -----------------------------------------------------
+        // 2. Tuong thich voi tai khoan cu luu mat khau thuong
+        // -----------------------------------------------------
+        if (!passwordValid &&
+            string.Equals(
+                user.PasswordHash,
+                request.Password,
+                StringComparison.Ordinal))
+        {
+            passwordValid = true;
+            isLegacyPassword = true;
+        }
+
+        if (!passwordValid)
         {
             return Unauthorized(new
             {
@@ -203,18 +277,29 @@ public class AuthController : ControllerBase
             });
         }
 
-        // =====================================================
-        // TAO JWT
-        // =====================================================
+        // -----------------------------------------------------
+        // 3. Chuyen tai khoan cu sang luu mat khau da bam
+        // -----------------------------------------------------
+        if (isLegacyPassword)
+        {
+            user.PasswordHash = _passwordHasher.HashPassword(
+                user,
+                request.Password
+            );
+
+            await _context.SaveChangesAsync();
+        }
+
+        // -----------------------------------------------------
+        // 4. Tao JWT
+        // -----------------------------------------------------
         string token = GenerateJwtToken(user);
 
         return Ok(new
         {
             success = true,
             message = "Dang nhap thanh cong.",
-
             token = token,
-
             user = new
             {
                 id = user.Id,
@@ -251,32 +336,29 @@ public class AuthController : ControllerBase
 
         if (int.TryParse(
             expireMinutesString,
-            out int configuredMinutes))
+            out int configuredMinutes) &&
+            configuredMinutes > 0)
         {
             expireMinutes = configuredMinutes;
         }
 
         var claims = new List<Claim>
         {
-            // ID cua tai khoan
             new Claim(
                 ClaimTypes.NameIdentifier,
                 user.Id.ToString()
             ),
 
-            // Ho ten
             new Claim(
                 ClaimTypes.Name,
                 user.FullName
             ),
 
-            // Email
             new Claim(
                 ClaimTypes.Email,
                 user.Email
             ),
 
-            // Role
             new Claim(
                 ClaimTypes.Role,
                 user.Role
@@ -328,5 +410,137 @@ public class AuthController : ControllerBase
         public string Email { get; set; } = "";
 
         public string Password { get; set; } = "";
+    }
+
+    private static string HashResetToken(string token)
+    {
+        byte[] bytes = SHA256.HashData(
+            Encoding.UTF8.GetBytes(token));
+
+        return Convert.ToHexString(bytes);
+    }
+
+    
+    [HttpPost("forgot-password")]
+    public async Task<IActionResult> ForgotPassword(
+        [FromBody] ForgotPasswordRequest request)
+    {
+        const string genericMessage =
+            "Neu email ton tai, ban se nhan duoc huong dan dat lai mat khau.";
+
+        var email = request.Email.Trim();
+
+        var user = await _context.Users
+            .FirstOrDefaultAsync(u => u.Email == email);
+
+        // Khong tiet lo email co ton tai hay khong.
+        if (user == null)
+        {
+            return Ok(new { message = genericMessage });
+        }
+
+        var rawToken = Convert.ToBase64String(
+            RandomNumberGenerator.GetBytes(32));
+
+        var tokenHash = HashResetToken(rawToken);
+        var now = DateTime.UtcNow;
+
+        // Vo hieu hoa cac token chua su dung truoc do.
+        var oldTokens = await _context.PasswordResetTokens
+            .Where(t => t.UserId == user.Id && !t.IsUsed)
+            .ToListAsync();
+
+        foreach (var oldToken in oldTokens)
+        {
+            oldToken.IsUsed = true;
+        }
+
+        var resetToken = new PasswordResetToken
+        {
+            UserId = user.Id,
+            TokenHash = tokenHash,
+            CreatedAt = now,
+            ExpiresAt = now.AddMinutes(15),
+            IsUsed = false
+        };
+
+        _context.PasswordResetTokens.Add(resetToken);
+        await _context.SaveChangesAsync();
+
+        var frontendBaseUrl = _configuration[
+            "EmailSettings:FrontendBaseUrl"];
+
+        if (string.IsNullOrWhiteSpace(frontendBaseUrl))
+        {
+            throw new InvalidOperationException(
+                "Chua cau hinh EmailSettings:FrontendBaseUrl.");
+        }
+
+        var resetUrl =
+            $"{frontendBaseUrl.TrimEnd('/')}/ResetPassword.html" +
+            $"?email={Uri.EscapeDataString(email)}" +
+            $"&token={Uri.EscapeDataString(rawToken)}";
+
+        try
+        {
+            await _emailService.SendPasswordResetEmailAsync(
+                email, resetUrl);
+        }
+        catch
+        {
+            // Vo hieu hoa token neu gui email that bai.
+            resetToken.IsUsed = true;
+            await _context.SaveChangesAsync();
+
+            // Ghi log loi o server; khong tra chi tiet SMTP cho client.
+            return StatusCode(500, new
+            {
+                message = "Khong the gui email luc nay. Vui long thu lai sau."
+            });
+        }
+
+        return Ok(new { message = genericMessage });
+    }
+
+    
+    [HttpPost("reset-password")]
+    public async Task<IActionResult> ResetPassword(
+        [FromBody] ResetPasswordRequest request)
+    {
+        var email = request.Email.Trim();
+        var tokenHash = HashResetToken(request.Token);
+
+        var now = DateTime.UtcNow;
+
+        var resetToken = await _context.PasswordResetTokens
+            .Include(t => t.User)
+            .FirstOrDefaultAsync(t =>
+                t.TokenHash == tokenHash &&
+                !t.IsUsed &&
+                t.ExpiresAt > now &&
+                t.User != null &&
+                t.User.Email == email);
+
+        if (resetToken == null || resetToken.User == null)
+        {
+            return BadRequest(new
+            {
+                message = "Lien ket khong hop le, da het han hoac da duoc su dung."
+            });
+        }
+
+        var user = resetToken.User;
+
+        user.PasswordHash = _passwordHasher.HashPassword(
+            user, request.NewPassword);
+
+        resetToken.IsUsed = true;
+
+        await _context.SaveChangesAsync();
+
+        return Ok(new
+        {
+            message = "Dat lai mat khau thanh cong."
+        });
     }
 }

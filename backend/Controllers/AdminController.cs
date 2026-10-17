@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using Microsoft.AspNetCore.Identity;
 using backend.Data;
 using backend.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -13,6 +14,7 @@ namespace backend.Controllers;
 public class AdminController : ControllerBase
 {
     private readonly ApplicationDbContext _db;
+    private readonly PasswordHasher<ApplicationUser> _passwordHasher = new();
 
     public AdminController(ApplicationDbContext db)
     {
@@ -397,7 +399,10 @@ public class AdminController : ControllerBase
         {
             FullName = request.FullName.Trim(),
             Email = request.Email.Trim(),
-            PasswordHash = request.Password,
+            PasswordHash = _passwordHasher.HashPassword(
+            new ApplicationUser(),
+            request.Password
+            ),
             Phone = request.Phone?.Trim() ?? "",
             Role = "Staff",
             CreatedAt = DateTime.UtcNow,
@@ -478,9 +483,11 @@ public class AdminController : ControllerBase
 
         if (!string.IsNullOrWhiteSpace(request.Password))
         {
-            employee.PasswordHash = request.Password;
+            employee.PasswordHash = _passwordHasher.HashPassword(
+                employee,
+                request.Password
+            );
         }
-
         employee.IsActive = request.IsActive;
 
         await _db.SaveChangesAsync();
@@ -970,27 +977,25 @@ public class AdminController : ControllerBase
         return Ok(room);
     }
 
+    
     // POST: /api/admin/rooms
     [HttpPost("rooms")]
     public async Task<IActionResult> CreateRoom(
         [FromBody] RoomRequest request)
     {
+        if (request == null)
+        {
+            return BadRequest(new
+            {
+                message = "Du lieu phong khong hop le."
+            });
+        }
+
         if (request.CinemaId <= 0)
         {
             return BadRequest(new
             {
                 message = "Vui long chon rap."
-            });
-        }
-
-        var cinema = await _db.Cinemas
-            .FirstOrDefaultAsync(x => x.Id == request.CinemaId);
-
-        if (cinema == null)
-        {
-            return NotFound(new
-            {
-                message = "Rap khong ton tai."
             });
         }
 
@@ -1010,73 +1015,139 @@ public class AdminController : ControllerBase
             });
         }
 
-        var room = new Room
+        // Gioi han de tranh tao phong co qua nhieu ghe
+        if (request.Rows > 26 || request.Columns > 50)
         {
-            CinemaId = request.CinemaId,
-            Name = request.Name.Trim(),
-            Rows = request.Rows,
-            Columns = request.Columns
-        };
-
-        _db.Rooms.Add(room);
-
-        await _db.SaveChangesAsync();
-
-        // Tao ghe tu dong
-        var seats = new List<Seat>();
-
-        for (int rowIndex = 0; rowIndex < request.Rows; rowIndex++)
-        {
-            string rowName = GetRowName(rowIndex);
-
-            for (int number = 1;
-                 number <= request.Columns;
-                 number++)
+            return BadRequest(new
             {
-                int type;
-                decimal price;
-
-                if (rowIndex < 2)
-                {
-                    // Standard
-                    type = 0;
-                    price = 75000;
-                }
-                else if (rowIndex < 4)
-                {
-                    // VIP
-                    type = 1;
-                    price = 95000;
-                }
-                else
-                {
-                    // Couple
-                    type = 2;
-                    price = 150000;
-                }
-
-                seats.Add(new Seat
-                {
-                    RoomId = room.Id,
-                    RowName = rowName,
-                    Number = number,
-                    Type = type,
-                    Price = price
-                });
-            }
+                message = "Phong toi da 26 hang va 50 cot."
+            });
         }
 
-        _db.Seats.AddRange(seats);
+        var cinema = await _db.Cinemas
+            .FirstOrDefaultAsync(x => x.Id == request.CinemaId);
 
-        await _db.SaveChangesAsync();
-
-        return Ok(new
+        if (cinema == null)
         {
-            message = "Them phong thanh cong.",
-            roomId = room.Id,
-            seatCount = seats.Count
-        });
+            return NotFound(new
+            {
+                message = "Rap khong ton tai."
+            });
+        }
+
+        // Kiem tra ten phong trong cung rap
+        bool roomExists = await _db.Rooms.AnyAsync(x =>
+            x.CinemaId == request.CinemaId &&
+            x.Name == request.Name.Trim());
+
+        if (roomExists)
+        {
+            return Conflict(new
+            {
+                message = "Ten phong da ton tai trong rap nay."
+            });
+        }
+
+        await using var transaction =
+            await _db.Database.BeginTransactionAsync();
+
+        try
+        {
+            var room = new Room
+            {
+                CinemaId = request.CinemaId,
+                Name = request.Name.Trim(),
+                Rows = request.Rows,
+                Columns = request.Columns
+            };
+
+            _db.Rooms.Add(room);
+
+            // Luu phong de database tao Id
+            await _db.SaveChangesAsync();
+
+            var seats = new List<Seat>();
+
+            for (int rowIndex = 0;
+                 rowIndex < request.Rows;
+                 rowIndex++)
+            {
+                string rowName = GetRowName(rowIndex);
+
+                for (int number = 1;
+                     number <= request.Columns;
+                     number++)
+                {
+                    int type;
+                    decimal price;
+
+                    if (rowIndex < 2)
+                    {
+                        type = 0;
+                        price = 75000m;
+                    }
+                    else if (rowIndex < 4)
+                    {
+                        type = 1;
+                        price = 95000m;
+                    }
+                    else
+                    {
+                        type = 2;
+                        price = 150000m;
+                    }
+
+                    seats.Add(new Seat
+                    {
+                        RoomId = room.Id,
+                        RowName = rowName,
+                        Number = number,
+                        Type = type,
+                        Price = price
+                    });
+                }
+            }
+
+            _db.Seats.AddRange(seats);
+
+            // Luu toan bo ghe
+            await _db.SaveChangesAsync();
+
+            await transaction.CommitAsync();
+
+            return Ok(new
+            {
+                message = "Them phong thanh cong.",
+                roomId = room.Id,
+                cinemaId = room.CinemaId,
+                roomName = room.Name,
+                rows = room.Rows,
+                columns = room.Columns,
+                seatCount = seats.Count
+            });
+        }
+        catch (DbUpdateException ex)
+        {
+            await transaction.RollbackAsync();
+
+            return StatusCode(500, new
+            {
+                message = "Loi database khi luu phong hoac ghe.",
+                detail = ex.InnerException?.Message ?? ex.Message
+            });
+        }
+        catch (Exception ex)
+        {
+            await transaction.RollbackAsync();
+
+            return StatusCode(500, new
+            {
+                message = "Khong the them phong.",
+                detail = ex.Message
+            });
+        }
     }
+
 
     // PUT: /api/admin/rooms/{id}
     [HttpPut("rooms/{id:int}")]
