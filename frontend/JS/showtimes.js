@@ -22,40 +22,9 @@ document.addEventListener("DOMContentLoaded", function () {
     movieId =
         params.get("movieId") || "1";
 
-    // Lay cinemaId tu URL
-    const cinemaIdFromUrl =
-        params.get("cinemaId");
-
     // Lay date tu URL
     const dateFromUrl =
         params.get("date");
-
-
-    // Neu co cinemaId tu URL
-    // thi uu tien dung cinemaId nay
-    if (cinemaIdFromUrl) {
-
-        selectedCinemaId =
-            cinemaIdFromUrl;
-
-        // Luu lai de cac trang khac co the dung
-        localStorage.setItem(
-            "selectedCinemaId",
-            cinemaIdFromUrl
-        );
-
-    }
-    else {
-
-        // Neu khong co cinemaId tren URL
-        // thi lay tu localStorage
-        selectedCinemaId =
-            localStorage.getItem(
-                "selectedCinemaId"
-            );
-
-    }
-
 
     // Neu co ngay tu URL
     // thi giu nguyen ngay nay
@@ -70,11 +39,6 @@ document.addEventListener("DOMContentLoaded", function () {
     console.log(
         "Movie ID:",
         movieId
-    );
-
-    console.log(
-        "Cinema ID:",
-        selectedCinemaId
     );
 
     console.log(
@@ -156,53 +120,6 @@ async function loadShowtimes() {
         // Luu tat ca suat chieu
         allShowtimes = data;
 
-
-        // =================================================
-        // LOC THEO RAP
-        // =================================================
-
-        if (selectedCinemaId) {
-
-            const cinemaId =
-                Number(
-                    selectedCinemaId
-                );
-
-
-            allShowtimes =
-                allShowtimes.filter(
-                    function (showtime) {
-
-                        return (
-                            showtime.cinema &&
-                            Number(
-                                showtime.cinema.id
-                            ) === cinemaId
-                        );
-
-                    }
-                );
-
-
-            console.log(
-                "Suat sau khi loc theo rap:",
-                allShowtimes
-            );
-
-
-            if (
-                allShowtimes.length === 0
-            ) {
-
-                showNoShowtimes();
-
-                return;
-
-            }
-
-        }
-
-
         // Load thong tin phim
         loadMovieInfo();
 
@@ -217,6 +134,11 @@ async function loadShowtimes() {
 
         const dates =
             getAvailableDates();
+
+        if (dates.length === 0) {
+            showNoShowtimes();
+            return;
+        }
 
 
         if (dates.length > 0) {
@@ -423,6 +345,10 @@ function getAvailableDates() {
                 getDateOnly(
                     showtime.startTime
                 );
+
+            if (isPastDate(date)) {
+                return;
+            }
 
 
             if (
@@ -687,10 +613,10 @@ function displayCinemas() {
 
 
     // =================================================
-    // GROUP THEO RAP
+    // GROUP THEO PHONG TRONG TUNG RAP
     // =================================================
 
-    const cinemaGroups = {};
+    const roomGroups = {};
 
 
     showtimes.forEach(
@@ -703,24 +629,28 @@ function displayCinemas() {
             }
 
 
-            const cinemaId =
-                showtime.cinema.id;
+            const roomId =
+                showtime.room
+                    ? showtime.room.id
+                    : "unknown";
+
+            const groupId =
+                `${showtime.cinema.id}-${roomId}`;
 
 
             if (
-                !cinemaGroups[cinemaId]
+                !roomGroups[groupId]
             ) {
 
-                cinemaGroups[cinemaId] = {
+                roomGroups[groupId] = {
 
-                    id:
-                        cinemaId,
+                    cinemaId:
+                        String(showtime.cinema.id),
 
-                    name:
-                        showtime.cinema.name,
-
-                    address:
-                        showtime.cinema.address,
+                    roomName:
+                        showtime.room
+                            ? showtime.room.name
+                            : "Phòng chiếu",
 
                     showtimes: []
 
@@ -729,8 +659,8 @@ function displayCinemas() {
             }
 
 
-            cinemaGroups[
-                cinemaId
+            roomGroups[
+                groupId
             ]
                 .showtimes
                 .push(
@@ -742,13 +672,114 @@ function displayCinemas() {
 
 
     // =================================================
-    // TAO GIAO DIEN RAP
+    // TAO GIAO DIEN PHONG CHIEU
     // =================================================
 
-    Object.values(
-        cinemaGroups
-    ).forEach(
-        function (cinema) {
+    const cinemas = Array.from(
+        new Map(
+            showtimes
+                .filter(showtime => showtime.cinema)
+                .map(showtime => [
+                    String(showtime.cinema.id),
+                    showtime.cinema
+                ])
+        ).values()
+    );
+
+    if (cinemas.length === 0) {
+        cinemaList.innerHTML = `
+            <div class="alert alert-warning">
+                Ngày này chưa có rạp nào mở suất chiếu.
+            </div>
+        `;
+        return;
+    }
+
+    const preferredCinemaId =
+        selectedCinemaId ||
+        localStorage.getItem("selectedCinemaId");
+    const selectedCinema =
+        cinemas.find(cinema =>
+            String(cinema.id) === String(preferredCinemaId)
+        ) || cinemas[0];
+
+    selectedCinemaId = String(selectedCinema.id);
+
+    const cinemaPicker =
+        document.createElement("div");
+    cinemaPicker.className = "cinema-picker mb-4";
+
+    const cinemaLabel =
+        document.createElement("label");
+    cinemaLabel.className = "form-label fw-semibold";
+    cinemaLabel.htmlFor = "showtimeCinemaSelect";
+    cinemaLabel.textContent = "Chọn rạp";
+
+    const cinemaSelect =
+        document.createElement("select");
+    cinemaSelect.id = "showtimeCinemaSelect";
+    cinemaSelect.className = "form-select";
+
+    cinemas.forEach(function (cinema) {
+        const option =
+            document.createElement("option");
+        option.value = String(cinema.id);
+        option.textContent = cinema.name;
+        option.selected =
+            String(cinema.id) === selectedCinemaId;
+        cinemaSelect.appendChild(option);
+    });
+
+    const cinemaAddress =
+        document.createElement("p");
+    cinemaAddress.className = "text-muted mt-2 mb-0";
+    cinemaAddress.textContent = selectedCinema.address || "";
+
+    cinemaPicker.append(
+        cinemaLabel,
+        cinemaSelect,
+        cinemaAddress
+    );
+    cinemaList.appendChild(cinemaPicker);
+
+    cinemaSelect.addEventListener("change", function () {
+        selectedCinemaId = cinemaSelect.value;
+        localStorage.setItem("selectedCinemaId", selectedCinemaId);
+        selectedShowtime = null;
+
+        const selectedShowtimeElement =
+            document.getElementById("selectedShowtime");
+        if (selectedShowtimeElement) {
+            selectedShowtimeElement.textContent =
+                "Vui lòng chọn suất chiếu";
+        }
+
+        displayCinemas();
+        updateNextButton();
+    });
+
+    const orderedRoomGroups =
+        Object.values(roomGroups)
+            .filter(room =>
+                room.cinemaId === selectedCinemaId
+            );
+
+    orderedRoomGroups.forEach(function (room) {
+        room.showtimes.sort(
+            function (a, b) {
+                return new Date(a.startTime) - new Date(b.startTime);
+            }
+        );
+    });
+
+    orderedRoomGroups.sort(function (a, b) {
+        return a.roomName.localeCompare(b.roomName, "vi", {
+            numeric: true
+        });
+    });
+
+    orderedRoomGroups.forEach(
+        function (room) {
 
             const cinemaItem =
                 document.createElement(
@@ -766,7 +797,7 @@ function displayCinemas() {
 
                     <div class="cinema-icon">
 
-                        <i class="bi bi-building"></i>
+                        <i class="bi bi-door-open"></i>
 
                     </div>
 
@@ -774,17 +805,8 @@ function displayCinemas() {
                     <div>
 
                         <h4>
-                            ${escapeHtml(
-                                cinema.name
-                            )}
+                            ${escapeHtml(room.roomName)}
                         </h4>
-
-                        <p>
-                            ${escapeHtml(
-                                cinema.address ||
-                                ""
-                            )}
-                        </p>
 
                     </div>
 
@@ -804,25 +826,8 @@ function displayCinemas() {
                 );
 
 
-            // Sap xep gio
-            cinema.showtimes.sort(
-                function (a, b) {
-
-                    return (
-                        new Date(
-                            a.startTime
-                        ) -
-                        new Date(
-                            b.startTime
-                        )
-                    );
-
-                }
-            );
-
-
             // Tao cac nut gio
-            cinema.showtimes.forEach(
+            room.showtimes.forEach(
                 function (showtime) {
 
                     const button =
@@ -911,6 +916,13 @@ function selectShowtime(
 
     selectedShowtime =
         showtime;
+
+    if (showtime.cinema) {
+        localStorage.setItem(
+            "selectedCinemaId",
+            showtime.cinema.id
+        );
+    }
 
 
     const selectedShowtimeElement =
@@ -1047,6 +1059,18 @@ function getDateOnly(
         10
     );
 
+}
+
+
+function isPastDate(value) {
+    const today = new Date();
+    const todayDate = [
+        today.getFullYear(),
+        String(today.getMonth() + 1).padStart(2, "0"),
+        String(today.getDate()).padStart(2, "0")
+    ].join("-");
+
+    return getDateOnly(value) < todayDate;
 }
 
 
@@ -1188,7 +1212,7 @@ function showNoShowtimes() {
             <div class="alert alert-warning">
 
                 Phim này hiện chưa có suất chiếu
-                tại rạp đang chọn.
+                trong các ngày sắp tới.
 
             </div>
 
@@ -1210,7 +1234,7 @@ function showNoShowtimes() {
             <div class="alert alert-warning">
 
                 Phim này hiện chưa có suất chiếu
-                tại rạp đang chọn.
+                trong các ngày sắp tới.
 
             </div>
 

@@ -129,6 +129,8 @@
 
 .movie-card {
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
     height: 100%;
     background: #ffffff;
     border-radius: 10px;
@@ -208,10 +210,17 @@
 }
 
 .movie-info {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
     padding: 20px;
 }
 
 .movie-info h4 {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
     min-height: 48px;
     margin-bottom: 12px;
     font-size: 19px;
@@ -221,6 +230,7 @@
 .movie-meta {
     display: flex;
     justify-content: space-between;
+    min-height: 20px;
     margin-bottom: 10px;
     color: #777777;
     font-size: 13px;
@@ -231,14 +241,21 @@
 }
 
 .movie-info p {
-    min-height: 42px;
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    height: 63px;
+    min-height: 63px;
     margin-bottom: 18px;
     color: #777777;
     font-size: 14px;
+    line-height: 1.5;
 }
 
 .btn-movie-book {
     display: block;
+    margin-top: auto;
     padding: 10px;
     border-radius: 5px;
     background: #e50914;
