@@ -140,7 +140,7 @@ function displayMovies() {
     // LỌC PHIM ACTIVE
     // =================================================
 
-    let movies =
+    const movies =
         allMovies.filter(function (movie) {
 
             if (
@@ -155,14 +155,6 @@ function displayMovies() {
             return true;
 
         });
-
-
-    // =================================================
-    // CHỈ HIỂN THỊ 4 PHIM
-    // =================================================
-
-    movies =
-        movies.slice(0, 4);
 
 
     if (
@@ -216,6 +208,12 @@ function displayMovies() {
             movie.durationMinutes ||
             0;
 
+        const rating =
+            movie.rating !== null &&
+            movie.rating !== undefined
+                ? Number(movie.rating).toFixed(1)
+                : "0.0";
+
 
         let posterUrl =
             movie.posterUrl ||
@@ -230,9 +228,13 @@ function displayMovies() {
             posterUrl.startsWith("/")
         ) {
 
-            posterUrl =
-                BACKEND_URL +
-                posterUrl;
+            const poster = new URL(
+                posterUrl,
+                BACKEND_URL
+            );
+
+            poster.searchParams.set("v", "6");
+            posterUrl = poster.href;
 
         }
 
@@ -303,7 +305,7 @@ function displayMovies() {
 
                             <i class="bi bi-star-fill"></i>
 
-                            0.0
+                            ${rating}
 
                         </span>
 
@@ -743,6 +745,10 @@ function loadAvailableDates() {
                     showtime.startTime
                 );
 
+            if (isPastDate(date)) {
+                return;
+            }
+
 
             if (
                 !dates.includes(date)
@@ -757,6 +763,16 @@ function loadAvailableDates() {
 
 
     dates.sort();
+
+    if (dates.length === 0) {
+        const option =
+            document.createElement("option");
+
+        option.value = "";
+        option.textContent = "Không có ngày chiếu sắp tới";
+        dateSelect.appendChild(option);
+        return;
+    }
 
 
     // =================================================
@@ -912,6 +928,18 @@ function getDateOnly(value) {
         10
     );
 
+}
+
+
+function isPastDate(value) {
+    const today = new Date();
+    const todayDate = [
+        today.getFullYear(),
+        String(today.getMonth() + 1).padStart(2, "0"),
+        String(today.getDate()).padStart(2, "0")
+    ].join("-");
+
+    return getDateOnly(value) < todayDate;
 }
 
 

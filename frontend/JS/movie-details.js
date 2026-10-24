@@ -361,6 +361,37 @@ function setupTrailer(trailerUrl) {
 }
 
 
+function getTrailerEmbedUrl(trailerUrl) {
+    try {
+        const url = new URL(trailerUrl);
+        const isYouTube =
+            url.hostname === "youtube.com" ||
+            url.hostname === "www.youtube.com" ||
+            url.hostname === "m.youtube.com";
+        const isShortYouTube = url.hostname === "youtu.be";
+
+        if (!isYouTube && !isShortYouTube) {
+            return trailerUrl;
+        }
+
+        const videoId = isShortYouTube
+            ? url.pathname.slice(1)
+            : url.pathname === "/watch"
+                ? url.searchParams.get("v")
+                : url.pathname.startsWith("/embed/")
+                    ? url.pathname.split("/")[2]
+                    : null;
+
+        return videoId
+            ? `https://www.youtube.com/embed/${encodeURIComponent(videoId)}?autoplay=1`
+            : trailerUrl;
+    } catch (error) {
+        console.error("URL trailer không hợp lệ:", error);
+        return trailerUrl;
+    }
+}
+
+
 function showTrailer() {
 
     const trailerButton =
@@ -417,7 +448,7 @@ function showTrailer() {
                 "block";
 
             trailerFrame.src =
-                trailerUrl;
+                getTrailerEmbedUrl(trailerUrl);
         }
 
 
